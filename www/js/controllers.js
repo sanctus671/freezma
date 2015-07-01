@@ -539,4 +539,55 @@ angular.module('your_app_name.controllers', [])
   $scope.doRefresh();
 })
 
+.controller('EbooksCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+    
+    
+    
+})
+
+.controller('EbookCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+    
+})
+
+.controller('VideosCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+    
+    
+    
+})
+
+.controller('VideoCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+    
+})
+
+.controller('PlansCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+    
+    
+    
+})
+
+.controller('PlanCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+    
+})
+
+.controller('ProductsCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+    
+    
+    
+})
+
+.controller('ProductCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+    
+})
+
+.controller('MessagesCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+    
+    
+    
+})
+
+.controller('MessageCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+    
+})
+
+
 ;

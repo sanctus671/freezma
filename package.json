@@ -29,7 +29,11 @@
     "https://github.com/katzer/cordova-plugin-email-composer.git",
     "https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git",
     "com.google.playservices",
-    "nl.x-services.plugins.socialsharing"
+    "nl.x-services.plugins.socialsharing",
+    {
+      "locator": "https://github.com/katzer/cordova-plugin-email-composer.git",
+      "id": "de.appplant.cordova.plugin.email-composer"
+    }
   ],
   "cordovaPlatforms": [
     "android"

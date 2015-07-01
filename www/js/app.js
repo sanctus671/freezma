@@ -174,7 +174,137 @@ angular.module('your_app_name', ['ionic', 'your_app_name.directives', 'your_app_
     }
   })
 
+  .state('app.ebooks', {
+    url: "/ebooks",
+    views: {
+      'menuContent': {
+        templateUrl: "ebooks.html",
+        controller: 'EbooksCtrl'
+      }
+    },
+    data: {
+      authenticate: true
+    }
+  })
 
+  .state('app.ebook', {
+    url: "/ebooks/:ebookId",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/ebook.html",
+        controller: 'EbookCtrl'
+      }
+    },
+    data: {
+      authenticate: true
+    }
+  })
+  
+  .state('app.videos', {
+    url: "/videos",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/videos.html",
+        controller: 'VideosCtrl'
+      }
+    },
+    data: {
+      authenticate: true
+    }
+  })
+
+  .state('app.video', {
+    url: "/videos/:videoId",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/video.html",
+        controller: 'VideoCtrl'
+      }
+    },
+    data: {
+      authenticate: true
+    }
+  })
+  
+  .state('app.plans', {
+    url: "/plans",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/plans.html",
+        controller: 'PlansCtrl'
+      }
+    },
+    data: {
+      authenticate: true
+    }
+  })
+
+  .state('app.plan', {
+    url: "/plans/:planId",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/plan.html",
+        controller: 'PlanCtrl'
+      }
+    },
+    data: {
+      authenticate: true
+    }
+  })
+  
+  .state('app.products', {
+    url: "/products",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/products.html",
+        controller: 'ProductsCtrl'
+      }
+    },
+    data: {
+      authenticate: true
+    }
+  })
+
+  .state('app.product', {
+    url: "/products/:productId",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/product.html",
+        controller: 'ProductCtrl'
+      }
+    },
+    data: {
+      authenticate: true
+    }
+  })
+  
+  .state('app.messages', {
+    url: "/messages",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/messages.html",
+        controller: 'MessagesCtrl'
+      }
+    },
+    data: {
+      authenticate: true
+    }
+  })
+
+  .state('app.message', {
+    url: "/messages/:messageId",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/message.html",
+        controller: 'MessageCtrl'
+      }
+    },
+    data: {
+      authenticate: true
+    }
+  })  
+  
+  
   .state('app.settings', {
     url: "/settings",
     views: {

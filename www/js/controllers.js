@@ -539,8 +539,16 @@ angular.module('your_app_name.controllers', [])
   $scope.doRefresh();
 })
 
-.controller('EbooksCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
-    
+.controller('EbooksCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+    $ionicLoading.show({
+      template: 'Loading ebooks...'
+    });
+
+    ShopService.getProducts()
+    .then(function(data){
+        console.log(data);
+      $ionicLoading.hide();
+    });    
     
     
 })

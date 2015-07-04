@@ -600,4 +600,80 @@ angular.module('your_app_name.services', [])
   };
 })
 
+// WP WOO COMMERCE RELATED FUNCTIONS
+.service('ShopService', function ($rootScope, $http, $q, WORDPRESS_API_URL, WORDPRESS_API2_URL){
+    
+  this.getDownloads = function() {
+    var deferred = $q.defer(),
+        user = JSON.parse(window.localStorage.ionWordpress_user || null);
+    
+    $http.jsonp(WORDPRESS_API2_URL + 
+    '?downloads=true' + 
+    '&userid=' + user.user_id)
+    .success(function(data) {
+        console.log(data);
+      deferred.resolve(data);
+    })
+    .error(function(data) {
+      deferred.reject(data);
+    });
+
+    return deferred.promise;
+  };
+  
+  this.createOrder = function(productid) {
+    var deferred = $q.defer(),
+        user = JSON.parse(window.localStorage.ionWordpress_user || null);
+    
+    $http.jsonp(WORDPRESS_API2_URL + 
+    '?order=true' + 
+    '&userid=' + user.user_id +
+    '&productid=' + productid
+    )
+    .success(function(data) {
+        console.log(data);
+      deferred.resolve(data);
+    })
+    .error(function(data) {
+                console.log(data);
+      deferred.reject(data);
+    });
+
+    return deferred.promise;
+  };
+  
+  this.getProducts = function() {
+    var deferred = $q.defer();
+    
+    $http.get(WORDPRESS_API2_URL + '?products=true')
+    .success(function(data) {
+        console.log("suc");
+      deferred.resolve(data);
+    })
+    .error(function(data) {
+        console.log(data);
+      deferred.reject(data);
+    });
+
+    return deferred.promise;
+  };  
+  
+  this.getProduct = function(productid) {
+    var deferred = $q.defer();
+    
+    $http.jsonp(WORDPRESS_API2_URL + 
+    '?product=true' +
+    '&productid=' + productid)
+    .success(function(data) {
+      deferred.resolve(data);
+    })
+    .error(function(data) {
+      deferred.reject(data);
+    });
+
+    return deferred.promise;
+  };  
+  
+})
+
 ;

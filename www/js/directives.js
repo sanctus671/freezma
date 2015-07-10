@@ -336,6 +336,30 @@ angular.module('your_app_name.directives', [])
 	};
 })
 
+.directive('productCard', function() {
+	return {
+		templateUrl: 'partials/product-card.html'
+	};
+})
+
+.directive('ebookCard', function() {
+	return {
+		templateUrl: 'partials/ebook-card.html'
+	};
+})
+
+.directive('planCard', function() {
+	return {
+		templateUrl: 'partials/plan-card.html'
+	};
+})
+
+.directive('videoCard', function() {
+	return {
+		templateUrl: 'partials/video-card.html'
+	};
+})
+
 
 .directive('showHideContainer', function(){
 	return {

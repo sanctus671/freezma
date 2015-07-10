@@ -1,8 +1,20 @@
-<ion-view class="contact-view">
+<ion-view class="videos-view home-view" >
   <ion-nav-title>
-    <span>videos</span>
+    <span>Videos</span>
   </ion-nav-title>
   <ion-content>
+
+    <!-- Refresh to get the new posts -->
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
+    </ion-refresher>
+
+    <div class="posts">
+        <div ng-show="videos.length < 1">
+            You have no videos to view. Go to the store and get some!
+        </div>        
+        <div video-card ng-repeat="video in videos" class="post-card"></div>
+    </div>
+
 
   </ion-content>
 </ion-view>

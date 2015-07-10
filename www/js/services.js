@@ -606,30 +606,26 @@ angular.module('your_app_name.services', [])
   this.getDownloads = function() {
     var deferred = $q.defer(),
         user = JSON.parse(window.localStorage.ionWordpress_user || null);
-    
-    $http.jsonp(WORDPRESS_API2_URL + 
-    '?downloads=true' + 
-    '&userid=' + user.user_id)
+
+    $http.get(WORDPRESS_API2_URL + '?downloads=true&userid=' + user.user_id)
     .success(function(data) {
-        console.log(data);
+        console.log("suc");
+
       deferred.resolve(data);
     })
     .error(function(data) {
+        console.log(data);
       deferred.reject(data);
     });
 
-    return deferred.promise;
+    return deferred.promise;    
   };
+  
   
   this.createOrder = function(productid) {
     var deferred = $q.defer(),
         user = JSON.parse(window.localStorage.ionWordpress_user || null);
-    
-    $http.jsonp(WORDPRESS_API2_URL + 
-    '?order=true' + 
-    '&userid=' + user.user_id +
-    '&productid=' + productid
-    )
+    $http.post(WORDPRESS_API2_URL, {order:'true',userid: user.user_id, productid:productid})    
     .success(function(data) {
         console.log(data);
       deferred.resolve(data);
@@ -661,13 +657,13 @@ angular.module('your_app_name.services', [])
   this.getProduct = function(productid) {
     var deferred = $q.defer();
     
-    $http.jsonp(WORDPRESS_API2_URL + 
-    '?product=true' +
-    '&productid=' + productid)
+    $http.get(WORDPRESS_API2_URL + '?product=true&productid=' + productid)
     .success(function(data) {
+        console.log("suc");
       deferred.resolve(data);
     })
     .error(function(data) {
+        console.log(data);
       deferred.reject(data);
     });
 

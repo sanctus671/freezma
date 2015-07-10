@@ -1,8 +1,20 @@
-<ion-view class="contact-view">
+<ion-view class="plans-view home-view" >
   <ion-nav-title>
-    <span>plans</span>
+    <span>Plans</span>
   </ion-nav-title>
   <ion-content>
+
+    <!-- Refresh to get the new posts -->
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
+    </ion-refresher>
+
+    <div class="posts">
+        <div ng-show="plans.length < 1">
+            You have no plans to view. Go to the store and get some!
+        </div>        
+        <div plan-card ng-repeat="plan in plans" class="post-card"></div>
+    </div>
+
 
   </ion-content>
 </ion-view>

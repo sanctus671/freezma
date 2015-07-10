@@ -543,13 +543,34 @@ angular.module('your_app_name.controllers', [])
     $ionicLoading.show({
       template: 'Loading ebooks...'
     });
-
-    ShopService.getProducts()
-    .then(function(data){
-        console.log(data);
-      $ionicLoading.hide();
-    });    
     
+    $scope.ebooks = [];
+    
+    ShopService.getDownloads()
+    .then(function(data){   
+        $scope.ebooks = data.filter(function(ebook){
+            return ebook.product.categories.indexOf('ebooks') > -1;
+        });
+
+        $ionicLoading.hide();
+    });  
+    
+    $scope.doRefresh = function() {
+        $ionicLoading.show({
+          template: 'Loading ebooks...'
+        });
+
+        ShopService.getDownloads()
+        .then(function(data){   
+            $scope.ebooks = data.filter(function(ebook){
+                return ebook.product.categories.indexOf('ebooks') > -1;
+            });
+            $ionicLoading.hide();
+            $scope.$broadcast('scroll.refreshComplete');
+        });
+        
+
+    };     
     
 })
 
@@ -557,8 +578,38 @@ angular.module('your_app_name.controllers', [])
     
 })
 
-.controller('VideosCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('VideosCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+    $ionicLoading.show({
+      template: 'Loading videos...'
+    });
     
+    $scope.videos = [];
+    
+    ShopService.getDownloads()
+    .then(function(data){   
+        $scope.videos = data.filter(function(video){
+            return video.product.categories.indexOf('videos') > -1;
+        });
+
+        $ionicLoading.hide();
+    });  
+    
+    $scope.doRefresh = function() {
+        $ionicLoading.show({
+          template: 'Loading videos...'
+        });
+
+        ShopService.getDownloads()
+        .then(function(data){   
+            $scope.videos = data.filter(function(video){
+                return video.product.categories.indexOf('videos') > -1;
+            });
+            $ionicLoading.hide();
+            $scope.$broadcast('scroll.refreshComplete');
+        });
+        
+
+    };     
     
     
 })
@@ -567,8 +618,38 @@ angular.module('your_app_name.controllers', [])
     
 })
 
-.controller('PlansCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('PlansCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+    $ionicLoading.show({
+      template: 'Loading plans...'
+    });
     
+    $scope.plans = [];
+    
+    ShopService.getDownloads()
+    .then(function(data){   
+        $scope.plans = data.filter(function(plan){
+            return plan.product.categories.indexOf('plans') > -1;
+        });
+
+        $ionicLoading.hide();
+    });  
+    
+    $scope.doRefresh = function() {
+        $ionicLoading.show({
+          template: 'Loading plans...'
+        });
+
+        ShopService.getDownloads()
+        .then(function(data){   
+            $scope.plans = data.filter(function(plan){
+                return plan.product.categories.indexOf('plans') > -1;
+            });
+            $ionicLoading.hide();
+            $scope.$broadcast('scroll.refreshComplete');
+        });
+        
+
+    };         
     
     
 })
@@ -577,10 +658,32 @@ angular.module('your_app_name.controllers', [])
     
 })
 
-.controller('ProductsCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('ProductsCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+    $ionicLoading.show({
+      template: 'Loading store...'
+    });
     
+    $scope.products = [];
     
+    ShopService.getProducts()
+    .then(function(data){
+        $scope.products = data;
+console.log(data);
+        $ionicLoading.hide();
+    });      
     
+  $scope.doRefresh = function() {
+    $ionicLoading.show({
+      template: 'Loading store...'
+    });
+    
+    ShopService.getProducts()
+    .then(function(data){
+        $scope.products = data;
+        $ionicLoading.hide();
+        $scope.$broadcast('scroll.refreshComplete');
+    });  
+  };    
 })
 
 .controller('ProductCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {

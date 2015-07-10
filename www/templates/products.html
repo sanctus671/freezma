@@ -1,8 +1,17 @@
-<ion-view class="contact-view">
+<ion-view class="products-view home-view">
   <ion-nav-title>
-    <span>products</span>
+    <span>Products</span>
   </ion-nav-title>
   <ion-content>
+
+    <!-- Refresh to get the new posts -->
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
+    </ion-refresher>
+
+    <div class="posts">
+      <div product-card ng-repeat="product in products" class="post-card"></div>
+    </div>
+
 
   </ion-content>
 </ion-view>

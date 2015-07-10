@@ -295,7 +295,7 @@ angular.module('your_app_name.controllers', [])
   $scope.doLogin = function(){
 
     $ionicLoading.show({
-      template: 'Loging in...'
+      template: 'Logging in...'
     });
 
     var user = {
@@ -574,8 +574,21 @@ angular.module('your_app_name.controllers', [])
     
 })
 
-.controller('EbookCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('EbookCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+   $ionicLoading.show({
+      template: 'Loading ebook...'
+    });
     
+    $scope.ebook = [];
+    var ebookId = $stateParams.ebookId;
+    ShopService.getDownloads()
+    .then(function(data){   
+        $scope.ebook = data.filter(function(ebook){
+            return ebook.product_id == ebookId;
+        })[0];
+        $ionicLoading.hide();
+    });     
+       
 })
 
 .controller('VideosCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
@@ -614,7 +627,22 @@ angular.module('your_app_name.controllers', [])
     
 })
 
-.controller('VideoCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('VideoCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+   $ionicLoading.show({
+      template: 'Loading video...'
+    });
+    
+    $scope.video = [];
+    var videoId = $stateParams.videoId;
+    ShopService.getDownloads()
+    .then(function(data){   
+        $scope.video = data.filter(function(video){
+            return video.product_id == videoId;
+        })[0];
+        console.log($scope.video);
+        $ionicLoading.hide();
+    });     
+    
     
 })
 
@@ -654,8 +682,21 @@ angular.module('your_app_name.controllers', [])
     
 })
 
-.controller('PlanCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('PlanCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+   $ionicLoading.show({
+      template: 'Loading plan...'
+    });
     
+    $scope.plan = [];
+    var planId = $stateParams.planId;
+    ShopService.getDownloads()
+    .then(function(data){   
+        $scope.plan = data.filter(function(plan){
+            return plan.product_id == planId;
+        })[0];
+        $ionicLoading.hide();
+    });     
+   
 })
 
 .controller('ProductsCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
@@ -686,8 +727,33 @@ console.log(data);
   };    
 })
 
-.controller('ProductCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('ProductCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+    $ionicLoading.show({
+      template: 'Loading item...'
+    });
     
+    $scope.product = [];
+    var productId = $stateParams.productId;
+    ShopService.getProduct(productId)
+    .then(function(data){
+        console.log(data);
+        $scope.product = data.product;
+        
+        $ionicLoading.hide();
+    });      
+    
+  $scope.doRefresh = function() {
+    $ionicLoading.show({
+      template: 'Loading item...'
+    });
+    
+    ShopService.getProduct(productId)
+    .then(function(data){
+        $scope.product = data;
+        $ionicLoading.hide();
+        $scope.$broadcast('scroll.refreshComplete');
+    });  
+  };     
 })
 
 .controller('MessagesCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {

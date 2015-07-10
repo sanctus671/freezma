@@ -1,16 +1,25 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<ion-view class="post-view">
+  <ion-nav-title>
+    <span ng-bind-html="product.title | rawHtml"></span>
+  </ion-nav-title>
+  <ion-content>
+    <div class="post">
+      <div class="card-header">
+        <h1 ng-bind-html="product.title | rawHtml"></h1>
+      </div>
+<div class="item item-image">
+    <img ng-src="{{product.featured_src}}">
+</div>        
+      <div class="card-content" ng-bind-html="product.description | rawHtml"></div>
+    </div>
+
+  </ion-content>
+  <ion-footer-bar class="new-comment post-footer bar bar-footer">
+      <div class="col col-100 button-container col-center">
+        <button class="button button-clear send" type="submit" ng-click="" ng-disabled="">
+          BUY
+        </button>
+      </div>
+
+  </ion-footer-bar>
+</ion-view>

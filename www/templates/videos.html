@@ -1,4 +1,4 @@
-<ion-view class="videos-view home-view" >
+<ion-view class="videos-view home-view bookmarks-view" >
   <ion-nav-title>
     <span>Videos</span>
   </ion-nav-title>
@@ -7,11 +7,15 @@
     <!-- Refresh to get the new posts -->
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
     </ion-refresher>
-
-    <div class="posts">
-        <div ng-show="videos.length < 1">
-            You have no videos to view. Go to the store and get some!
-        </div>        
+    <div ng-if="videos.length < 1" class="row bookmarks-container">
+      <div  class="col col-center">
+        <div class="empty-results">
+          <i class="icon ion-ios-paper"></i>
+          <h3 class="no-bookmarks">You have no videos to view. Go to the store and get some!</h3>
+        </div>
+      </div>
+    </div>
+    <div class="posts">       
         <div video-card ng-repeat="video in videos" class="post-card"></div>
     </div>
 

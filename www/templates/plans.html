@@ -1,4 +1,4 @@
-<ion-view class="plans-view home-view" >
+<ion-view class="plans-view home-view bookmarks-view" >
   <ion-nav-title>
     <span>Plans</span>
   </ion-nav-title>
@@ -7,11 +7,18 @@
     <!-- Refresh to get the new posts -->
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
     </ion-refresher>
-
+    <div ng-if="plans.length < 1" class="row bookmarks-container">
+      <div  class="col col-center">
+        <div class="empty-results">
+          <i class="icon ion-ios-paper"></i>
+          <h3 class="no-bookmarks">You have no plans to view. Go to the store and get some!</h3>
+        </div>
+      </div>
+    </div>
+    
+    
     <div class="posts">
-        <div ng-show="plans.length < 1">
-            You have no plans to view. Go to the store and get some!
-        </div>        
+      
         <div plan-card ng-repeat="plan in plans" class="post-card"></div>
     </div>
 

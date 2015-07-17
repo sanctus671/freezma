@@ -74,8 +74,8 @@ angular.module('your_app_name.controllers', [])
 
   //map
   $scope.position = {
-    lat: 43.07493,
-    lng: -89.381388
+    lat: -28.0163332,
+    lng: 153.4223185
   };
 
   $scope.$on('mapInitialized', function(event, map) {
@@ -819,6 +819,7 @@ console.log(data);
   MessageService.getMessages()
   .then(function(data){
     $scope.messages = data;
+    console.log(data);
     $scope.messages = _.map(data, function(message){
       if(message.sender){
         PostService.getUserGravatar(message.sender)
@@ -849,9 +850,10 @@ console.log(data);
       if(data){
         var user = AuthService.getUser();
         var message = {
-          author: {name: user.data.username},
-          content:$scope.new_message,
           date: Date.now(),
+          message: $scope.new_message,
+          receiver: "1",
+          sender: user.data.user_id,
           user_gravatar : user.data.avatar,
           id: data.message_id
         };

@@ -716,10 +716,8 @@ angular.module('your_app_name.services', [])
   this.createMessage = function(message) {
     var deferred = $q.defer(),
         user = JSON.parse(window.localStorage.ionWordpress_user || null);
-console.log({messagecreate:'true',userid: user.user_id, message:message});
     $http.post(WORDPRESS_API3_URL, {messagecreate:'true',userid: user.user_id, message:message})    
     .success(function(data) {
-        console.log(data);
       deferred.resolve(data);
     })
     .error(function(data) {

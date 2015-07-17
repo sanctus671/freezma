@@ -8,15 +8,14 @@
     </ion-refresher>     
       
     <div class="messages">
-      <div class="list">
-        <a class="item item-avatar" ng-repeat="message in messages" href="#" ng-class="{highlighted: message.id === new_message_id}">
-          <div ng-class="{avatarright: message.receiver == 1}">
-              {{message.receiver}}
-            <img ng-src="{{message.user_gravatar}}">
+      <div class="list card">
+        <div class="item" ng-repeat="message in messages" href="#" ng-class="{highlighted: message.id === new_message_id, 'item-avatar-right': message.receiver == 1, 'item-avatar': message.receiver != 1}">
+          <div>
+            <img class="item-image" ng-src="{{message.user_gravatar}}">
             <h2  ng-bind-html="user.userName | rawHtml"><span class="comment-date" am-time-ago="message.date + message.time"></span></h2>
             <p class="message-content" ng-bind-html="message.message | rawHtml"></p>
           </div>
-        </a>
+        </div>
           
       </div>
     </div>

@@ -1,3 +1,42 @@
 .bar.app-top-bar{
     background-color:#FEE900;
 }
+
+.register-view, .login-view, .forgot-password-view, .walkthrough-view{
+    background-color: #2B2B2B;
+}
+
+.register-view .input-fields .item, .login-view .input-fields .item, .forgot-password-view .input-fields .item{
+    background-color: #161616;
+}
+
+
+.register-view .toggle-view-anchor *, .login-view .toggle-view-anchor *, .forgot-password-view .toggle-view-anchor *{
+    
+    color:#FEE900 !important;
+}
+
+.register-view .button.register,.login-view .button.login,.forgot-password-view .button.recover, .walkthrough-view .bottom-content .sign-up{
+    background-color: rgba(255, 255, 255, 0.85);
+    border-color: rgba(252, 252, 252, 0.9);
+    color:white;
+}
+
+.walkthrough-view .bottom-content .sign-up{
+    color:#2B2B2B;
+    
+}
+
+.walkthrough-view .bottom-content .login{
+    
+     background-color: #161616;
+    border-color: rgba(252, 252, 252, 0.9);   
+}
+
+.walkthrough-view .scroll-content{
+    background-image:url(../img/appbg.png); 
+ -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    
+}

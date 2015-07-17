@@ -2,6 +2,9 @@
   <h1 ng-bind-html="post.title | rawHtml"></h1>
   <h2>Posted <span am-time-ago="post.date"></span> by <span class="author" ng-bind-html="post.author.name | rawHtml"></span></h2>
 </div>
+<div ng-if="post.thumbnail" class="item item-image">
+    <img ng-src="{{post.thumbnail}}">
+</div>
 <div class="card-content" ng-bind-html="post.content | rawHtml"></div>
 <div class="card-footer">
   <a class="card-button secondary" ng-click="sharePost(post.url)">SHARE</a>

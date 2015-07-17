@@ -8,6 +8,9 @@
         <h1 ng-bind-html="post.title | rawHtml"></h1>
         <h2>Posted <span am-time-ago="post.date"></span> by <span class="author" ng-bind-html="post.author.name | rawHtml"></span></h2>
       </div>
+<div ng-if="post.thumbnail" class="item item-image">
+    <img ng-src="{{post.thumbnail}}">
+</div>        
       <div class="card-content" ng-bind-html="post.content | rawHtml"></div>
     </div>
     <div class="post-actions">
@@ -20,6 +23,7 @@
       <div class="list">
         <a class="item item-avatar" ng-repeat="comment in comments" href="#" ng-class="{highlighted: comment.id === new_comment_id}">
           <img ng-src="{{comment.user_gravatar}}">
+
           <h2  ng-bind-html="comment.author.name | rawHtml"><span class="comment-date" am-time-ago="comment.date"></span></h2>
           <p class="message-content" ng-bind-html="comment.content | rawHtml"></p>
         </a>

@@ -532,6 +532,25 @@ angular.module('your_app_name.services', [])
       cookie: cookie
     };
   };
+  
+  this.getUserGravatar = function(userId){
+    var deferred = $q.defer();
+
+    $http.jsonp(WORDPRESS_API_URL + 'user/get_avatar/' +
+    '?user_id='+ userId +
+    '&type=full' +
+    '&callback=JSON_CALLBACK')
+    .success(function(data) {
+      deferred.resolve(data);
+    })
+    .error(function(data) {
+      deferred.reject(data);
+    });
+
+    return deferred.promise;  
+  }
+  
+  
 
   this.registerUser = function(username, email, displayName, password, nonce) {
     var deferred = $q.defer();
@@ -672,4 +691,45 @@ angular.module('your_app_name.services', [])
   
 })
 
+// WP MESSAGING RELATED FUNCTIONS
+.service('MessageService', function ($rootScope, $http, $q, WORDPRESS_API_URL, WORDPRESS_API2_URL, WORDPRESS_API3_URL){
+    
+  this.getMessages = function() {
+    var deferred = $q.defer(),
+        user = JSON.parse(window.localStorage.ionWordpress_user || null);
+
+    $http.get(WORDPRESS_API3_URL + '?messagesget=true&userid=' + user.user_id)
+    .success(function(data) {
+        console.log(data);
+
+      deferred.resolve(data);
+    })
+    .error(function(data) {
+        console.log(data);
+      deferred.reject(data);
+    });
+
+    return deferred.promise;    
+  };
+  
+  
+  this.createMessage = function(message) {
+    var deferred = $q.defer(),
+        user = JSON.parse(window.localStorage.ionWordpress_user || null);
+console.log({messagecreate:'true',userid: user.user_id, message:message});
+    $http.post(WORDPRESS_API3_URL, {messagecreate:'true',userid: user.user_id, message:message})    
+    .success(function(data) {
+        console.log(data);
+      deferred.resolve(data);
+    })
+    .error(function(data) {
+                console.log(data);
+      deferred.reject(data);
+    });
+
+    return deferred.promise;
+  };
+ 
+  
+})
 ;

@@ -6,6 +6,11 @@ angular.module('your_app_name.controllers', [])
   $scope.$on('$ionicView.enter', function(){
     // Refresh user data & avatar
     $scope.user = AuthService.getUser();
+    AuthService.getUserGravatar($scope.user.data.id).then(function(data){
+        $scope.user.avatar = data.avatar;
+    });
+
+    
   });
 })
 
@@ -104,6 +109,13 @@ angular.module('your_app_name.controllers', [])
   }).then(function(modal) {
     $scope.credits_modal = modal;
   });
+  
+  $ionicModal.fromTemplateUrl('partials/edit-avatar.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.avatar_modal = modal;
+  });  
 
   $scope.showTerms = function() {
     $scope.terms_modal.show();
@@ -115,6 +127,10 @@ angular.module('your_app_name.controllers', [])
 
   $scope.showCredits = function() {
     $scope.credits_modal.show();
+  };
+  
+  $scope.showAvatar = function() {
+    $scope.avatar_modal.show();
   };
 
   // Triggered on a the logOut button click
@@ -436,6 +452,7 @@ angular.module('your_app_name.controllers', [])
   PostService.getPost(postId)
   .then(function(data){
     $scope.post = data.post;
+    console.log(data);
     $scope.comments = _.map(data.post.comments, function(comment){
       if(comment.author){
         PostService.getUserGravatar(comment.author.id)
@@ -727,7 +744,7 @@ console.log(data);
   };    
 })
 
-.controller('ProductCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('ProductCtrl', function($scope, $state, $ionicPopup, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
     $ionicLoading.show({
       template: 'Loading item...'
     });
@@ -753,11 +770,100 @@ console.log(data);
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
     });  
-  };     
+  };  
+  
+  $scope.createOrder = function(){
+    $ionicLoading.show({
+      template: 'Purchasing...'
+    });
+    
+    ShopService.createOrder(productId)
+    .then(function(data){
+        $scope.product = data;
+        $ionicLoading.hide();
+        $ionicPopup.alert({
+            title: 'Purchase successful',
+            template: 'Thank you for your purchase! Head over to My eBooks, My videos or My plans to see your purchased items.'
+        });
+    });       
+  };
 })
 
-.controller('MessagesCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
-    
+.controller('MessagesCtrl', function($scope, $state, $ionicLoading, PostService, MessageService, $stateParams, AuthService, $ionicScrollDelegate) {
+  $ionicLoading.show({
+    template: 'Loading messages...'
+  });
+  var user = AuthService.getUser();
+  $scope.messages = [];
+  MessageService.getMessages()
+  .then(function(data){
+    $scope.messages = data;
+    $scope.messages = _.map(data, function(message){
+      if(message.sender){
+        PostService.getUserGravatar(message.sender)
+        .then(function(data){
+          message.user_gravatar = data.avatar;
+        });
+        return message;
+      }else{
+        return message;
+      }
+    });
+    $ionicLoading.hide();
+  });
+  
+    $scope.doRefresh = function() {
+    $ionicLoading.show({
+      template: 'Loading messages...'
+    });
+  MessageService.getMessages()
+  .then(function(data){
+    $scope.messages = data;
+    $scope.messages = _.map(data, function(message){
+      if(message.sender){
+        PostService.getUserGravatar(message.sender)
+        .then(function(data){
+          message.user_gravatar = data.avatar;
+        });
+        return message;
+      }else{
+        return message;
+      }
+    });
+    $ionicLoading.hide();
+    $scope.$broadcast('scroll.refreshComplete');
+  });    
+
+  }; 
+
+
+
+  $scope.createMessage = function(){
+
+    $ionicLoading.show({
+      template: 'Sending message...'
+    });
+
+    MessageService.createMessage($scope.new_message)
+    .then(function(data){
+      if(data){
+        var user = AuthService.getUser();
+        var message = {
+          author: {name: user.data.username},
+          content:$scope.new_message,
+          date: Date.now(),
+          user_gravatar : user.data.avatar,
+          id: data.message_id
+        };
+        $scope.messages.push(message);
+        $scope.new_message = "";
+        $scope.new_message_id = data.message_id;
+        $ionicLoading.hide();
+        // Scroll to new post
+        $ionicScrollDelegate.scrollBottom(true);
+      }
+    });
+  };    
     
     
 })

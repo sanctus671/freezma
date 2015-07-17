@@ -322,7 +322,12 @@ angular.module('your_app_name.directives', [])
 				$ionicHistory.nextViewOptions({
 					disableAnimate: true
 				});
-				$state.go('app.post', {postId: post.id});
+                                if (post.comments){
+                                    $state.go('app.post', {postId: post.id});
+                                }
+                                else{
+                                    $state.go('app.product', {productId: post.id});
+                                }
 			};
 		},
 		templateUrl: 'partials/my-tab.html'

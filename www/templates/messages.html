@@ -1,8 +1,36 @@
-<ion-view class="contact-view">
+<ion-view class="post-view">
   <ion-nav-title>
-    <span>messages</span>
+    Messages
   </ion-nav-title>
   <ion-content>
-
+     <!-- Refresh to get the new posts -->
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
+    </ion-refresher>     
+      
+    <div class="messages">
+      <div class="list">
+        <a class="item item-avatar" ng-repeat="message in messages" href="#" ng-class="{highlighted: message.id === new_message_id}">
+          <div ng-class="{avatarright: message.receiver == 1}">
+              {{message.receiver}}
+            <img ng-src="{{message.user_gravatar}}">
+            <h2  ng-bind-html="user.userName | rawHtml"><span class="comment-date" am-time-ago="message.date + message.time"></span></h2>
+            <p class="message-content" ng-bind-html="message.message | rawHtml"></p>
+          </div>
+        </a>
+          
+      </div>
+    </div>
   </ion-content>
+  <ion-footer-bar class="new-comment post-footer bar bar-footer">
+    <form name="message_form" class="row" novalidate>
+      <div class="col col-80 content col-center">
+        <input class="new-comment-message" type="text" placeholder="Write a message..." ng-model="new_message" required></input>
+      </div>
+      <div class="col col-20 button-container col-center">
+        <button class="button button-clear send" type="submit" ng-click="createMessage()" ng-disabled="message_form.$invalid">
+          Send
+        </button>
+      </div>
+    </form>
+  </ion-footer-bar>
 </ion-view>

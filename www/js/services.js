@@ -1,7 +1,7 @@
-angular.module('your_app_name.services', [])
+angular.module('app.services', [])
 
 // WP POSTS RELATED FUNCTIONS
-.service('PostService', function ($rootScope, $http, $q, WORDPRESS_API_URL, AuthService, BookMarkService){
+.service('PostService', function ($rootScope, $http, $q, WORDPRESS_API_URL, AuthService){
 
   this.getRecentPosts = function(page) {
     var deferred = $q.defer();
@@ -109,10 +109,7 @@ angular.module('your_app_name.services', [])
     window.plugins.socialsharing.share('Check this post here: ', null, null, link);
   };
 
-  this.bookmarkPost = function(post){
-    BookMarkService.bookmarkPost(post);
-    $rootScope.$broadcast("new-bookmark", post);
-  };
+
 })
 
 
@@ -280,31 +277,6 @@ angular.module('your_app_name.services', [])
 })
 
 
-// BOOKMARKS FUNCTIONS
-.service('BookMarkService', function (_){
-  this.bookmarkPost = function(bookmark_post){
-    var user_bookmarks = !_.isUndefined(window.localStorage.ionWordpress_bookmarks) ? JSON.parse(window.localStorage.ionWordpress_bookmarks) : [];
-
-    //check if this post is already saved
-    var existing_post = _.find(user_bookmarks, function(post){ return post.id == bookmark_post.id; });
-
-    if(!existing_post){
-      user_bookmarks.push({
-        id: bookmark_post.id,
-        title : bookmark_post.title,
-        date: bookmark_post.date,
-        excerpt: bookmark_post.excerpt
-      });
-    }
-
-    window.localStorage.ionWordpress_bookmarks = JSON.stringify(user_bookmarks);
-  };
-
-  this.getBookmarks = function(){
-    return JSON.parse(window.localStorage.ionWordpress_bookmarks || '[]');
-  };
-})
-
 
 // PUSH NOTIFICATIONS
 .service('PushNotificationsService', function ($rootScope, $state, $cordovaPush, WpPushServer, GCM_SENDER_ID, $ionicHistory){
@@ -388,7 +360,7 @@ angular.module('your_app_name.services', [])
 })
 
 
-// WP AUTHENTICATION RELATED FUNCTIONS
+// WP AUTHENTICATION AND USER RELATED FUNCTIONS
 .service('AuthService', function ($rootScope, $http, $q, WORDPRESS_API_URL){
 
   this.validateAuth = function(user) {
@@ -592,7 +564,7 @@ angular.module('your_app_name.services', [])
 
     window.localStorage.ionWordpress_user = null;
     window.localStorage.ionWordpress_user_avatar = null;
-    // window.localStorage.ionWordpress_bookmarks = null;
+    // window.localStorage.ionWordpress_/s = null;
   };
 
   //update user avatar from WP

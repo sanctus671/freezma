@@ -1,0 +1,2 @@
+d:
+ionic serve

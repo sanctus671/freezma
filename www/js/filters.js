@@ -1,4 +1,4 @@
-angular.module('your_app_name.filters', [])
+angular.module('app.filters', [])
 
 .filter('rawHtml', ['$sce', function($sce){
   return function(val) {

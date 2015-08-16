@@ -1,4 +1,4 @@
-angular.module('your_app_name.directives', [])
+angular.module('app.directives', [])
 
 .directive('recursiveMenu', function($compile) {
 	return {
@@ -31,7 +31,7 @@ angular.module('your_app_name.directives', [])
 				return $scope.menu;
 			};
 		},
-		templateUrl: 'partials/main-menu.html',
+		templateUrl: 'templates/partials/main-menu.html',
 		restrict: 'E',
 		replace: true,
 		transclude: true
@@ -87,7 +87,7 @@ angular.module('your_app_name.directives', [])
 				this._setTransform('translate3d(100%,0,0)', level);
 			};
 		},
-		templateUrl: 'partials/menu-level.html',
+		templateUrl: 'templates/partials/menu-level.html',
 		require: '^pushMenu',
 		restrict: 'EA',
 		replace: true,
@@ -154,7 +154,7 @@ angular.module('your_app_name.directives', [])
 			// 	utils.hideResultsPanel();
 			// };
 		},
-		templateUrl: 'partials/wp-search.html',
+		templateUrl: 'templates/partials/wp-search.html',
 		restrict: 'E',
 		replace: true,
 		transclude: true
@@ -296,7 +296,7 @@ angular.module('your_app_name.directives', [])
 				tabs.push(tab);
 			};
 		},
-		templateUrl: 'partials/search-results.html',
+		templateUrl: 'templates/partials/search-results.html',
 		restrict: 'E',
 		replace: true,
 		transclude: true
@@ -330,40 +330,48 @@ angular.module('your_app_name.directives', [])
                                 }
 			};
 		},
-		templateUrl: 'partials/my-tab.html'
+		templateUrl: 'templates/partials/my-tab.html'
 	};
 })
 
 
 .directive('postCard', function() {
 	return {
-		templateUrl: 'partials/post-card.html'
+		templateUrl: 'templates/partials/post-card.html'
 	};
 })
 
 .directive('productCard', function() {
 	return {
-		templateUrl: 'partials/product-card.html'
+		templateUrl: 'templates/partials/product-card.html'
+	};
+})
+
+.directive('shredCard', function() {
+	return {
+		templateUrl: 'templates/partials/shred-card.html'
 	};
 })
 
 .directive('ebookCard', function() {
 	return {
-		templateUrl: 'partials/ebook-card.html'
+		templateUrl: 'templates/partials/ebook-card.html'
 	};
 })
 
 .directive('planCard', function() {
 	return {
-		templateUrl: 'partials/plan-card.html'
+		templateUrl: 'templates/partials/plan-card.html'
 	};
 })
 
 .directive('videoCard', function() {
 	return {
-		templateUrl: 'partials/video-card.html'
+		templateUrl: 'templates/partials/video-card.html'
 	};
 })
+
+
 
 
 .directive('showHideContainer', function(){
@@ -384,7 +392,7 @@ angular.module('your_app_name.directives', [])
 				$scope.$broadcast("toggle-type", $scope.show);
 			};
 		},
-		templateUrl: 'partials/show-hide-password.html',
+		templateUrl: 'templates/partials/show-hide-password.html',
 		restrict: 'A',
 		replace: false,
 		transclude: true

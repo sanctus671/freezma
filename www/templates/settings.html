@@ -3,35 +3,24 @@
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
   <ion-nav-title>
-    <span>Settings</span>
+    <span>My Profile</span>
   </ion-nav-title>
   <ion-content>
     <ul class="list">
 
-      <ion-toggle ng-model="notifications" toggle-class="toggle-dark">Push Notifications</ion-toggle>
-
-      <div class="item item-divider">OPTIONS</div>
-      <a class="item option" ng-controller="EmailSenderCtrl" ng-click="sendFeedback()">
-        <i class="icon ion-chatbox dark"></i>
-        <span class="title">Send feedback</span>
-      </a>
-      <a class="item option" ng-controller="RateAppCtrl" ng-click="rateApp()">
-        <i class="icon ion-heart assertive"></i>
-        <span class="title">Rate this app</span>
-      </a>
-
-      <div class="item item-divider">LEGAL</div>
-
-      <a class="item" href="" ng-click="showTerms()">Terms of Service</a>
-      <a class="item" href="" ng-click="showFAQS()">FAQS</a>
-      <a class="item" href="" ng-click="showCredits()">Credits</a>
-
-      <div class="item item-divider">ACCOUNT</div>
+      <div class="item item-divider">PROFILE</div>
       <a class="item" href="" ng-click="showAvatar()">Edit Avatar</a>
+      <a class="item" href="" ng-click="showProfile()">Edit Profile</a>      
       <a class="item option" ng-click="showLogOutMenu()">
         <i class="icon ion-power"></i>
         <span class="title">Log out</span>
       </a>
+      
+      <div class="item item-divider">OTHER</div>
+
+      <a class="item" href="" ng-click="showTerms()">Terms of Service</a>
+      <a class="item" href="" ng-click="showFAQS()">FAQS</a>
+      <a class="item" href="" ng-click="showCredits()">Credits</a>      
 
     </ul>
   </ion-content>

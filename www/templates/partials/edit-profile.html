@@ -1,0 +1,47 @@
+<ion-modal-view class = "home-view">
+	<ion-header-bar>
+		<h1 class="title">Edit Profile</h1>
+		<div class="button button-clear" ng-click="profile_modal.hide()"><span class="icon ion-close"></span></div>
+	</ion-header-bar>
+	<ion-content>
+    <div class="post">
+<div class="item">
+
+  <label class="item item-input">
+    <span class="input-label">First Name</span>
+    <input type="text">
+  </label>
+  <label class="item item-input">
+    <span class="input-label">Last Name</span>
+    <input type="text">
+  </label>
+  <label class="item item-input">
+    <span class="input-label">Age</span>
+    <input type="number">
+  </label>
+  <label class="item item-input">
+    <span class="input-label">Country</span>
+    <country-select ng-model="selectedCountry"></country-select>
+  </label>
+  <label class="item item-input">
+    <span class="input-label">Biography</span>
+    <textarea placeholder="Biography"></textarea>
+  </label>  
+  <label class="item item-input">
+    <span class="input-label">Gym Goals</span>
+    <textarea placeholder="Gym Goals"></textarea>
+  </label>   
+  <label class="item item-input">
+    <span class="input-label">Life Goals</span>
+    <textarea placeholder="Life Goals"></textarea>
+  </label>       
+
+    </div>
+    </div>
+<div class="card-footer">
+  <a class="card-button secondary" ng-click="profile_modal.hide()">CANCEL</a>
+  <a class="card-button primary">UPDATE</a>
+
+</div>            
+	</ion-content>
+</ion-modal-view>

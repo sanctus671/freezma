@@ -1,4 +1,4 @@
-angular.module('your_app_name.controllers', [])
+angular.module('app.controllers', [])
 
 // APP - RIGHT MENU
 .controller('AppCtrl', function($scope, AuthService) {
@@ -57,69 +57,39 @@ angular.module('your_app_name.controllers', [])
 })
 
 
-// BOOKMARKS
-.controller('BookMarksCtrl', function($scope, $rootScope, BookMarkService) {
-
-  $scope.bookmarks = BookMarkService.getBookmarks();
-
-  // When a new post is bookmarked, we should update bookmarks list
-  $rootScope.$on("new-bookmark", function(event, post_id){
-    $scope.bookmarks = BookMarkService.getBookmarks();
-  });
-})
-
-
-// CONTACT
-.controller('ContactCtrl', function($scope) {
-
-  //map
-  $scope.position = {
-    lat: -28.0163332,
-    lng: 153.4223185
-  };
-
-  $scope.$on('mapInitialized', function(event, map) {
-    $scope.map = map;
-  });
-
-})
 
 // SETTINGS
 .controller('SettingCtrl', function($scope, $ionicActionSheet, $ionicModal, $state, AuthService) {
-  $scope.notifications = true;
+  $scope.notifications = false;
   $scope.sendLocation = false;
 
-  $ionicModal.fromTemplateUrl('partials/terms.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function(modal) {
-    $scope.terms_modal = modal;
-  });
-
-  $ionicModal.fromTemplateUrl('partials/faqs.html', {
+  $ionicModal.fromTemplateUrl('templates/partials/faqs.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {
     $scope.faqs_modal = modal;
   });
 
-  $ionicModal.fromTemplateUrl('partials/credits.html', {
+  $ionicModal.fromTemplateUrl('templates/partials/credits.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {
     $scope.credits_modal = modal;
   });
-  
-  $ionicModal.fromTemplateUrl('partials/edit-avatar.html', {
+
+  $ionicModal.fromTemplateUrl('templates/partials/edit-profile.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.profile_modal = modal;
+  });    
+    
+  $ionicModal.fromTemplateUrl('templates/partials/edit-avatar.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {
     $scope.avatar_modal = modal;
   });  
-
-  $scope.showTerms = function() {
-    $scope.terms_modal.show();
-  };
 
   $scope.showFAQS = function() {
     $scope.faqs_modal.show();
@@ -132,6 +102,10 @@ angular.module('your_app_name.controllers', [])
   $scope.showAvatar = function() {
     $scope.avatar_modal.show();
   };
+  
+  $scope.showProfile = function() {
+    $scope.profile_modal.show();
+  };  
 
   // Triggered on a the logOut button click
   $scope.showLogOutMenu = function() {
@@ -144,7 +118,7 @@ angular.module('your_app_name.controllers', [])
       // { text: 'Move' }
       // ],
       destructiveText: 'Logout',
-      titleText: 'Are you sure you want to logout? This app is awsome so I recommend you to stay.',
+      titleText: 'Are you sure you want to logout?',
       cancelText: 'Cancel',
       cancel: function() {
         // add cancel code..
@@ -167,21 +141,6 @@ angular.module('your_app_name.controllers', [])
 
 //EMAIL SENDER
 .controller('EmailSenderCtrl', function($scope) {
-
-  $scope.sendFeedback = function(){
-    cordova.plugins.email.isAvailable(
-      function (isAvailable) {
-        // alert('Service is not available') unless isAvailable;
-        cordova.plugins.email.open({
-          to:      'john@doe.com',
-          cc:      'jane@doe.com',
-          subject: 'Feedback',
-          body:    'This app is awesome'
-        });
-      }
-    );
-  };
-
   $scope.sendContactMail = function(){
     cordova.plugins.email.isAvailable(
       function (isAvailable) {
@@ -194,103 +153,6 @@ angular.module('your_app_name.controllers', [])
         });
       }
     );
-  };
-})
-
-
-// RATE THIS APP
-.controller('RateAppCtrl', function($scope) {
-
-  $scope.rateApp = function(){
-    if(ionic.Platform.isIOS()){
-      AppRate.preferences.storeAppURL.ios = '<my_app_id>';
-      AppRate.promptForRating(true);
-    }else if(ionic.Platform.isAndroid()){
-      AppRate.preferences.storeAppURL.android = 'market://details?id=<package_name>';
-      AppRate.promptForRating(true);
-    }
-  };
-})
-
-
-//ADMOB
-.controller('AdmobCtrl', function($scope, $ionicActionSheet, AdMob) {
-
-  $scope.manageAdMob = function() {
-
-    // Show the action sheet
-    var hideSheet = $ionicActionSheet.show({
-      //Here you can add some more buttons
-      buttons: [
-      { text: 'Show AdMob Banner' },
-      { text: 'Show AdMob Interstitial' }
-      ],
-      destructiveText: 'Remove Ads',
-      titleText: 'Choose the ad to show',
-      cancelText: 'Cancel',
-      cancel: function() {
-        // add cancel code..
-      },
-      destructiveButtonClicked: function() {
-        console.log("removing ads");
-        AdMob.removeAds();
-        return true;
-      },
-      buttonClicked: function(index, button) {
-        if(button.text == 'Show AdMob Banner')
-        {
-          console.log("show AdMob banner");
-          AdMob.showBanner();
-        }
-        if(button.text == 'Show AdMob Interstitial')
-        {
-          console.log("show AdMob interstitial");
-          AdMob.showInterstitial();
-        }
-        return true;
-      }
-    });
-  };
-})
-
-
-//IAD
-.controller('iAdCtrl', function($scope, $ionicActionSheet, iAd) {
-
-  $scope.manageiAd = function() {
-
-    // Show the action sheet
-    var hideSheet = $ionicActionSheet.show({
-      //Here you can add some more buttons
-      buttons: [
-      { text: 'Show iAd Banner' },
-      { text: 'Show iAd Interstitial' }
-      ],
-      destructiveText: 'Remove Ads',
-      titleText: 'Choose the ad to show - Interstitial only works in iPad',
-      cancelText: 'Cancel',
-      cancel: function() {
-        // add cancel code..
-      },
-      destructiveButtonClicked: function() {
-        console.log("removing ads");
-        iAd.removeAds();
-        return true;
-      },
-      buttonClicked: function(index, button) {
-        if(button.text == 'Show iAd Banner')
-        {
-          console.log("show iAd banner");
-          iAd.showBanner();
-        }
-        if(button.text == 'Show iAd Interstitial')
-        {
-          console.log("show iAd interstitial");
-          iAd.showInterstitial();
-        }
-        return true;
-      }
-    });
   };
 })
 
@@ -432,10 +294,7 @@ angular.module('your_app_name.controllers', [])
     PostService.sharePost(link);
   };
 
-  $scope.bookmarkPost = function(post){
-    $ionicLoading.show({ template: 'Post Saved!', noBackdrop: true, duration: 1000 });
-    PostService.bookmarkPost(post);
-  };
+
 
   $scope.doRefresh();
 
@@ -548,13 +407,63 @@ angular.module('your_app_name.controllers', [])
     PostService.sharePost(link);
   };
 
-  $scope.bookmarkPost = function(post){
-    $ionicLoading.show({ template: 'Post Saved!', noBackdrop: true, duration: 1000 });
-    PostService.bookmarkPost(post);
-  };
+
 
   $scope.doRefresh();
 })
+
+.controller('ShredsCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+    $ionicLoading.show({
+      template: 'Loading 8 week shred...'
+    });
+    
+    $scope.shreds = [];
+    
+    ShopService.getDownloads()
+    .then(function(data){   
+        $scope.shreds = data.filter(function(shred){
+            return shred.product.categories.indexOf('8weekshred') > -1;
+        });
+
+        $ionicLoading.hide();
+    });  
+    
+    $scope.doRefresh = function() {
+        $ionicLoading.show({
+          template: 'Loading 8 week shred...'
+        });
+
+        ShopService.getDownloads()
+        .then(function(data){   
+            $scope.shreds = data.filter(function(shred){
+                return shred.product.categories.indexOf('8weekshred') > -1;
+            });
+            $ionicLoading.hide();
+            $scope.$broadcast('scroll.refreshComplete');
+        });
+        
+
+    };     
+    
+})
+
+.controller('ShredCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+   $ionicLoading.show({
+      template: 'Loading video...'
+    });
+    
+    $scope.shred = [];
+    var shredId = $stateParams.shredId;
+    ShopService.getDownloads()
+    .then(function(data){   
+        $scope.shred = data.filter(function(shred){
+            return shred.product_id == shredId;
+        })[0];
+        $ionicLoading.hide();
+    });     
+       
+})
+
 
 .controller('EbooksCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
     $ionicLoading.show({

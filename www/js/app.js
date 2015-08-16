@@ -9,8 +9,8 @@ angular.module('underscore', [])
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('your_app_name', ['ionic', 'your_app_name.directives', 'your_app_name.controllers', 'templates', 'your_app_name.services', 'your_app_name.config', 'ngMap', 'your_app_name.filters', 'angularMoment', 'underscore',
-'your_app_name.factories', 'ngCordova'])
+angular.module('app', ['ionic', 'app.directives', 'app.controllers', 'app.services', 'app.config', 'ngMap', 'app.filters', 'angularMoment', 'underscore',
+'app.factories', 'ngCordova', 'countrySelect'])
 
 .run(function($ionicPlatform, AuthService, $rootScope, $state, PushNotificationsService) {
 
@@ -81,7 +81,7 @@ angular.module('your_app_name', ['ionic', 'your_app_name.directives', 'your_app_
 
   .state('walkthrough', {
     url: "/",
-    templateUrl: "walkthrough.html",
+    templateUrl: "templates/walkthrough.html",
     controller: 'WalkthroughCtrl',
     data: {
       authenticate: false
@@ -90,7 +90,7 @@ angular.module('your_app_name', ['ionic', 'your_app_name.directives', 'your_app_
 
   .state('register', {
     url: "/register",
-    templateUrl: "register.html",
+    templateUrl: "templates/register.html",
     controller: 'RegisterCtrl',
     data: {
       authenticate: false
@@ -99,7 +99,7 @@ angular.module('your_app_name', ['ionic', 'your_app_name.directives', 'your_app_
 
   .state('login', {
     url: "/login",
-    templateUrl: "login.html",
+    templateUrl: "templates/login.html",
     controller: 'LoginCtrl',
     data: {
       authenticate: false
@@ -108,7 +108,7 @@ angular.module('your_app_name', ['ionic', 'your_app_name.directives', 'your_app_
 
   .state('forgot_password', {
     url: "/forgot_password",
-    templateUrl: "forgot-password.html",
+    templateUrl: "templates/forgot-password.html",
     controller: 'ForgotPasswordCtrl',
     data: {
       authenticate: false
@@ -118,42 +118,18 @@ angular.module('your_app_name', ['ionic', 'your_app_name.directives', 'your_app_
   .state('app', {
     url: "/app",
     abstract: true,
-    templateUrl: "side-menu.html",
+    templateUrl: "templates/side-menu.html",
     controller: 'AppCtrl'
   })
 
   .state('app.home', {
+                cache: false,
     url: "/home",
     views: {
       'menuContent': {
-        templateUrl: "home.html",
+
+        templateUrl: "templates/home.html",
         controller: 'HomeCtrl'
-      }
-    },
-    data: {
-      authenticate: true
-    }
-  })
-
-  .state('app.bookmarks', {
-    url: "/bookmarks",
-    views: {
-      'menuContent': {
-        templateUrl: "bookmarks.html",
-        controller: 'BookMarksCtrl'
-      }
-    },
-    data: {
-      authenticate: true
-    }
-  })
-
-  .state('app.contact', {
-    url: "/contact",
-    views: {
-      'menuContent': {
-        templateUrl: "contact.html",
-        controller: 'ContactCtrl'
       }
     },
     data: {
@@ -165,7 +141,7 @@ angular.module('your_app_name', ['ionic', 'your_app_name.directives', 'your_app_
     url: "/post/:postId",
     views: {
       'menuContent': {
-        templateUrl: "post.html",
+        templateUrl: "templates/post.html",
         controller: 'PostCtrl'
       }
     },
@@ -174,11 +150,39 @@ angular.module('your_app_name', ['ionic', 'your_app_name.directives', 'your_app_
     }
   })
 
+  .state('app.shreds', {
+    url: "/shreds",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/shreds.html",
+        controller: 'ShredsCtrl'
+      }
+    },
+    data: {
+      authenticate: true
+    }
+  })
+
+  .state('app.shred', {
+    url: "/shreds/:shredId",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/shred.html",
+        controller: 'ShredCtrl'
+      }
+    },
+    data: {
+      authenticate: true
+    }
+  })
+
+
+
   .state('app.ebooks', {
     url: "/ebooks",
     views: {
       'menuContent': {
-        templateUrl: "ebooks.html",
+        templateUrl: "templates/ebooks.html",
         controller: 'EbooksCtrl'
       }
     },
@@ -309,7 +313,7 @@ angular.module('your_app_name', ['ionic', 'your_app_name.directives', 'your_app_
     url: "/settings",
     views: {
       'menuContent': {
-        templateUrl: "settings.html",
+        templateUrl: "templates/settings.html",
         controller: 'SettingCtrl'
       }
     },
@@ -322,7 +326,7 @@ angular.module('your_app_name', ['ionic', 'your_app_name.directives', 'your_app_
     url: "/category/:categoryTitle/:categoryId",
     views: {
       'menuContent': {
-        templateUrl: "category.html",
+        templateUrl: "templates/category.html",
         controller: 'PostCategoryCtrl'
       }
     },

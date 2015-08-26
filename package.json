@@ -33,7 +33,8 @@
     {
       "locator": "https://github.com/katzer/cordova-plugin-email-composer.git",
       "id": "de.appplant.cordova.plugin.email-composer"
-    }
+    },
+    "cordova-plugin-camera"
   ],
   "cordovaPlatforms": [
     "android"

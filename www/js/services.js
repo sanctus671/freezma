@@ -278,87 +278,6 @@ angular.module('app.services', [])
 
 
 
-// PUSH NOTIFICATIONS
-.service('PushNotificationsService', function ($rootScope, $state, $cordovaPush, WpPushServer, GCM_SENDER_ID, $ionicHistory){
-  /* Apple recommends you register your application for push notifications on the device every time it’s run since tokens can change. The documentation says: ‘By requesting the device token and passing it to the provider every time your application launches, you help to ensure that the provider has the current token for the device. If a user restores a backup to a device other than the one that the backup was created for (for example, the user migrates data to a new device), he or she must launch the application at least once for it to receive notifications again. If the user restores backup data to a new device or reinstalls the operating system, the device token changes. Moreover, never cache a device token and give that to your provider; always get the token from the system whenever you need it.’ */
-  this.register = function() {
-    if(ionic.Platform.isIOS())
-    {
-      var ios_config = {
-        "badge": true,
-        "sound": true,
-        "alert": true
-      };
-
-      $cordovaPush.register(ios_config).then(function(result) {
-        // Success -- send deviceToken to server, and store for future use
-        console.log("Registration OK: " + result);
-        WpPushServer.storeDeviceToken("ios", result);
-      }, function(err) {
-        console.log("Registration error: " + err);
-      });
-
-      $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-        console.log("Recieve push notification with notification.relatedvalue: " + notification.relatedvalue);
-
-        if(notification.relatedvalue)
-        {
-          $ionicHistory.nextViewOptions({
-            disableAnimate: true
-          });
-          $state.go("app.post", { postId: notification.relatedvalue });
-        }
-      });
-    }
-    else if(ionic.Platform.isAndroid())
-    {
-      var android_config = {
-        "senderID": GCM_SENDER_ID // REPLACE THIS WITH YOURS FROM GCM CONSOLE
-      };
-
-      $cordovaPush.register(android_config).then(function(result) {
-        // Success
-        console.log("result: " + result);
-      }, function(err) {
-        // Error
-        console.log("error: " + err);
-      });
-
-      $rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-        switch(notification.event)
-        {
-          case 'registered':
-            if (notification.regid.length > 0 ) {
-              WpPushServer.storeDeviceToken("android", notification.regid);
-            }
-            break;
-
-          case 'message':
-            // this is the actual push notification. its format depends on the data model from the push server
-            console.log('message = ' + notification);
-
-            if(notification.payload.relatedvalue)
-            {
-              $ionicHistory.nextViewOptions({
-                disableAnimate: true
-              });
-              $state.go("app.post", { postId: notification.payload.relatedvalue });
-            }
-            break;
-
-          case 'error':
-            // alert('GCM error = ' + notification.msg);
-            break;
-
-          default:
-            // alert('An unknown GCM event has occurred');
-            break;
-        }
-      });
-    }
-  };
-})
-
 
 // WP AUTHENTICATION AND USER RELATED FUNCTIONS
 .service('AuthService', function ($rootScope, $http, $q, WORDPRESS_API_URL){
@@ -589,6 +508,71 @@ angular.module('app.services', [])
 
     return avatar_dfd.promise;
   };
+  
+  this.editUserAvatar = function() {
+    var avatar_dfd = $q.defer(),
+        authService = this,
+        user = JSON.parse(window.localStorage.ionWordpress_user || null);
+
+    $http.jsonp(WORDPRESS_API_URL + 'user/get_avatar/' +
+    '?user_id='+ user.user_id +
+    '&type=full' +
+    '&callback=JSON_CALLBACK')
+    .success(function(data) {
+
+      window.localStorage.ionWordpress_user_avatar =  JSON.stringify(data.avatar);
+
+      avatar_dfd.resolve(data.avatar);
+    })
+    .error(function(err) {
+      avatar_dfd.reject(err);
+    });
+
+    return avatar_dfd.promise;
+  };  
+  
+  this.getUserProfile = function(){
+    var deferred = $q.defer(),
+        user = JSON.parse(window.localStorage.ionWordpress_user || null);
+
+    $http.jsonp(WORDPRESS_API_URL + 'user/get_user_meta/' +
+    '?cookie='+ user.cookie +
+    '&callback=JSON_CALLBACK')
+    .success(function(data) {
+      deferred.resolve(data);
+    })
+    .error(function(data) {
+      deferred.reject(data);
+    });
+
+    return deferred.promise;  
+  }  
+  
+  this.editUserProfile = function(profileData) {
+    var profile = $q.defer(),
+        authService = this,
+        user = JSON.parse(window.localStorage.ionWordpress_user || null);
+
+    $http.jsonp(WORDPRESS_API_URL + 'user/update_user_meta_vars/' +
+    '?cookie='+ user.cookie +
+    '&wpcf-first-name=' + profileData.firstName + 
+    '&wpcf-last-name=' + profileData.lastName + 
+    '&wpcf-age=' + profileData.age + 
+    '&wpcf-country=' + profileData.country + 
+    '&wpcf-biography=' + profileData.biography + 
+    '&wpcf-gym-goals=' + profileData.gymGoals + 
+    '&wpcf-life-goals=' + profileData.lifeGoals + 
+    '&callback=JSON_CALLBACK')
+    .success(function(data) {
+
+      profile.resolve(data);
+    })
+    .error(function(err) {
+      profile.reject(err);
+    });
+
+    return profile.promise;
+  };    
 })
 
 // WP WOO COMMERCE RELATED FUNCTIONS
@@ -618,11 +602,11 @@ angular.module('app.services', [])
         user = JSON.parse(window.localStorage.ionWordpress_user || null);
     $http.post(WORDPRESS_API2_URL, {order:'true',userid: user.user_id, productid:productid})    
     .success(function(data) {
-        console.log(data);
+
       deferred.resolve(data);
     })
     .error(function(data) {
-                console.log(data);
+
       deferred.reject(data);
     });
 
@@ -630,15 +614,15 @@ angular.module('app.services', [])
   };
   
   this.getProducts = function() {
-    var deferred = $q.defer();
-    
-    $http.get(WORDPRESS_API2_URL + '?products=true')
+    var deferred = $q.defer(),
+        user = JSON.parse(window.localStorage.ionWordpress_user || null);
+    $http.get(WORDPRESS_API2_URL + '?products=true&userid=' + user.user_id)
     .success(function(data) {
-        console.log("suc");
+
       deferred.resolve(data);
     })
     .error(function(data) {
-        console.log(data);
+
       deferred.reject(data);
     });
 
@@ -650,11 +634,11 @@ angular.module('app.services', [])
     
     $http.get(WORDPRESS_API2_URL + '?product=true&productid=' + productid)
     .success(function(data) {
-        console.log("suc");
+
       deferred.resolve(data);
     })
     .error(function(data) {
-        console.log(data);
+
       deferred.reject(data);
     });
 

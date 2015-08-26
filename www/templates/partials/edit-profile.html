@@ -7,40 +7,40 @@
     <div class="post">
 <div class="item">
 
-  <label class="item item-input">
+  <label class="item item-input item-stacked-label">
     <span class="input-label">First Name</span>
-    <input type="text">
+    <input type="text" ng-model="profile.firstName" placeholder="First Name">
   </label>
-  <label class="item item-input">
+  <label class="item item-input item-stacked-label">
     <span class="input-label">Last Name</span>
-    <input type="text">
+    <input type="text" ng-model="profile.lastName" placeholder="First Name">
   </label>
-  <label class="item item-input">
+  <label class="item item-input item-stacked-label">
     <span class="input-label">Age</span>
-    <input type="number">
+    <input type="number" ng-model="profile.age" placeholder="Age">
   </label>
-  <label class="item item-input">
+  <label class="item item-input  item-select">
     <span class="input-label">Country</span>
-    <country-select ng-model="selectedCountry"></country-select>
+    <country-select ng-model="profile.country" placeholder="Country"></country-select>
   </label>
-  <label class="item item-input">
+  <label class="item item-input item-stacked-label">
     <span class="input-label">Biography</span>
-    <textarea placeholder="Biography"></textarea>
+    <textarea rows="5" placeholder="Biography" ng-model="profile.biography"></textarea>
   </label>  
-  <label class="item item-input">
+  <label class="item item-input item-stacked-label">
     <span class="input-label">Gym Goals</span>
-    <textarea placeholder="Gym Goals"></textarea>
+    <textarea rows="5" placeholder="Gym Goals" ng-model="profile.gymGoals"></textarea>
   </label>   
-  <label class="item item-input">
+  <label class="item item-input item-stacked-label">
     <span class="input-label">Life Goals</span>
-    <textarea placeholder="Life Goals"></textarea>
+    <textarea rows="5" placeholder="Life Goals" ng-model="profile.lifeGoals"></textarea>
   </label>       
 
     </div>
     </div>
 <div class="card-footer">
   <a class="card-button secondary" ng-click="profile_modal.hide()">CANCEL</a>
-  <a class="card-button primary">UPDATE</a>
+  <a class="card-button primary" ng-click="updateProfile();profile_modal.hide()">UPDATE</a>
 
 </div>            
 	</ion-content>

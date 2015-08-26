@@ -10,9 +10,9 @@ angular.module('underscore', [])
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 angular.module('app', ['ionic', 'app.directives', 'app.controllers', 'app.services', 'app.config', 'ngMap', 'app.filters', 'angularMoment', 'underscore',
-'app.factories', 'ngCordova', 'countrySelect'])
+'app.factories', 'ngCordova'])
 
-.run(function($ionicPlatform, AuthService, $rootScope, $state, PushNotificationsService) {
+.run(function($ionicPlatform, AuthService, $rootScope, $state) {
 
   $ionicPlatform.on("deviceready", function(){
 
@@ -41,7 +41,7 @@ angular.module('app', ['ionic', 'app.directives', 'app.controllers', 'app.servic
       StatusBar.styleDefault();
     }
 
-    PushNotificationsService.register();
+
 
   });
 
@@ -57,7 +57,7 @@ angular.module('app', ['ionic', 'app.directives', 'app.controllers', 'app.servic
       }
     });
 
-    PushNotificationsService.register();
+
   });
 
   // UI Router Authentication Check

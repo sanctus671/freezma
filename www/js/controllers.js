@@ -59,23 +59,94 @@ angular.module('app.controllers', [])
 
 
 // SETTINGS
-.controller('SettingCtrl', function($scope, $ionicActionSheet, $ionicModal, $state, AuthService) {
+.controller('SettingCtrl', function($scope, $ionicActionSheet, $ionicModal, $ionicLoading, $state, AuthService, WORDPRESS_API4_URL) {
   $scope.notifications = false;
   $scope.sendLocation = false;
+  $scope.profile = {
+        firstName : null,
+        lastName : null,
+        age : null,
+        country : null,
+        biography : null,
+        gymGoals : null,
+        lifeGoals : null         
+  };
+  AuthService.getUserProfile().then(function(data){
+    $scope.profile = {
+        firstName : data["wpcf-first-name"],
+        lastName : data["wpcf-last-name"],
+        age : parseInt(data["wpcf-age"]),
+        country : data["wpcf-country"],
+        biography : data["wpcf-biography"],
+        gymGoals : data["wpcf-gym-goals"],
+        lifeGoals : data["wpcf-life-goals"]    
+    };
+    
 
-  $ionicModal.fromTemplateUrl('templates/partials/faqs.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function(modal) {
-    $scope.faqs_modal = modal;
-  });
+  });  
+  $scope.updateProfile = function(){
+    $ionicLoading.show({
+        template: 'Updating profile...'
+    });      
+    AuthService.editUserProfile($scope.profile).then(function(data){
+        $ionicLoading.hide();
+    });
+  };
+  
+  $scope.useGetFile = function(){
+        navigator.camera.getPicture(
+                $scope.onPhotoSuccess,
+                function(message){/*alert('Failed: ' + message);*/},
+                {
+                        quality: 25,
+                        sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+                        encodingType: Camera.EncodingType.JPEG,
+                        correctOrientation: true
 
-  $ionicModal.fromTemplateUrl('templates/partials/credits.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function(modal) {
-    $scope.credits_modal = modal;
-  });
+
+                }
+
+
+        )      
+  };
+  
+
+  
+  $scope.useGetPicture = function(){
+        navigator.camera.getPicture(
+                $scope.onPhotoSuccess,
+                function(message){/*alert('Failed: ' + message);*/},
+                {
+                        quality: 25,
+                        sourceType: Camera.PictureSourceType.Camera,
+                        encodingType: Camera.EncodingType.JPEG,
+                        correctOrientation: true,
+                        cameraDirection: Camera.Direction.FRONT
+
+
+                }
+
+
+        )      
+  };  
+  
+  $scope.onPhotoSuccess = function(imageURI){
+        $ionicLoading.show({
+            template: 'Updating avatar...'
+        }); 
+	var imageMenu = document.getElementById('menu-avatar');
+        var imageAvatar = document.getElementById('image-avatar');
+	imageMenu.src = imageURI;
+        imageAvatar.src = imageURI;
+        var options = new FileUploadOptions();
+        options.fileKey="fileToUpload";
+        options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+        options.mimeType="image/jpeg";
+        var ft = new FileTransfer();
+        ft.upload(imageURI, encodeURI(WORDPRESS_API4_URL), function(){$ionicLoading.hide();},  function(){$ionicLoading.hide();}, options);		
+		
+	     
+  };  
 
   $ionicModal.fromTemplateUrl('templates/partials/edit-profile.html', {
     scope: $scope,
@@ -90,21 +161,16 @@ angular.module('app.controllers', [])
   }).then(function(modal) {
     $scope.avatar_modal = modal;
   });  
-
-  $scope.showFAQS = function() {
-    $scope.faqs_modal.show();
-  };
-
-  $scope.showCredits = function() {
-    $scope.credits_modal.show();
-  };
   
   $scope.showAvatar = function() {
     $scope.avatar_modal.show();
   };
   
   $scope.showProfile = function() {
+    
     $scope.profile_modal.show();
+    
+    
   };  
 
   // Triggered on a the logOut button click
@@ -167,7 +233,7 @@ angular.module('app.controllers', [])
 })
 
 //LOGIN
-.controller('LoginCtrl', function($scope, $state, $ionicLoading, AuthService, PushNotificationsService) {
+.controller('LoginCtrl', function($scope, $state, $ionicLoading, AuthService) {
   $scope.user = {};
 
   $scope.doLogin = function(){
@@ -206,7 +272,7 @@ angular.module('app.controllers', [])
       template: 'Recovering password...'
     });
 
-    AuthService.forgotPassword($scope.user.userName)
+    AuthService.doForgotPassword($scope.user.userName)
     .then(function(data){
       if(data.status == "error"){
         $scope.error = data.error;
@@ -220,7 +286,7 @@ angular.module('app.controllers', [])
 
 
 // REGISTER
-.controller('RegisterCtrl', function($scope, $state, $ionicLoading, AuthService, PushNotificationsService) {
+.controller('RegisterCtrl', function($scope, $state, $ionicLoading, AuthService) {
   $scope.user = {};
 
   $scope.doRegister = function(){
@@ -690,6 +756,7 @@ console.log(data);
     .then(function(data){
         $scope.product = data;
         $ionicLoading.hide();
+        $state.go('app.products');
         $ionicPopup.alert({
             title: 'Purchase successful',
             template: 'Thank you for your purchase! Head over to My eBooks, My videos or My plans to see your purchased items.'

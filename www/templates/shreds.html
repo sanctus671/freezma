@@ -1,16 +1,24 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<ion-view class="videos-view home-view bookmarks-view" >
+  <ion-nav-title>
+    <span>8 Week Shred</span>
+  </ion-nav-title>
+  <ion-content>
+
+    <!-- Refresh to get the new posts -->
+    <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
+    </ion-refresher>
+    <div ng-if="shreds.length < 1" class="row bookmarks-container">
+      <div  class="col col-center">
+        <div class="empty-results">
+          <i class="icon ion-ios-paper"></i>
+          <h3 class="no-bookmarks">You have no videos to view. Go to the store and get some!</h3>
+        </div>
+      </div>
+    </div>
+    <div class="posts">       
+        <div video-card ng-repeat="shred in shreds" class="post-card"></div>
+    </div>
+
+
+  </ion-content>
+</ion-view>

@@ -25,8 +25,7 @@ angular.module('app.controllers', [])
         parent.name = parent.title;
         parent.link = parent.slug;
 
-        var items = _.filter(categories, function(category){ return category.parent===parent.id; });
-
+        var items = _.filter(categories, function(category){ return category.parent===parent.id; });   
         if(items.length > 0){
           parent.menu = {
             title: parent.title,
@@ -43,9 +42,8 @@ angular.module('app.controllers', [])
   CategoryService.getCategories()
   .then(function(data){
 
-
     var sorted_categories = _.sortBy(data.categories, function(category){ return category.title; });
-    var parents = _.filter(sorted_categories, function(category){ return category.parent===0; });
+    var parents = _.filter(sorted_categories, function(category){ return category.parent===0 && category.title !== "8 Week Shred" && category.title !== "Custom Plans"; });
     var result = getItems(parents, sorted_categories);
 
     $scope.menu = {
@@ -329,7 +327,12 @@ angular.module('app.controllers', [])
     //Always bring me the latest posts => page=1
     PostService.getRecentPosts(1)
     .then(function(data){
-
+      data.posts = data.posts.filter(function(post){
+                if (post.categories[0]){
+                    return post.categories[0].title.indexOf('8 Week Shred') < 0 && post.categories[0].title.indexOf('Custom Plans') < 0;
+                }
+                else{return false;}
+            });        
       $scope.totalPages = data.pages;
       $scope.posts = PostService.shortenPosts(data.posts);
 
@@ -478,19 +481,27 @@ angular.module('app.controllers', [])
   $scope.doRefresh();
 })
 
-.controller('ShredsCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('ShredsCtrl', function($scope, $state, $ionicLoading, ShopService, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
     $ionicLoading.show({
       template: 'Loading 8 week shred...'
     });
     
     $scope.shreds = [];
-    
+ 
+            
     ShopService.getDownloads()
-    .then(function(data){   
-        $scope.shreds = data.filter(function(shred){
-            return shred.product.categories.indexOf('8weekshred') > -1;
+    .then(function(data){ 
+        var shredMember = false;
+console.log(data);
+        shredMember = data.filter(function(shredCheck){
+            return shredCheck.product.categories.indexOf('8weekshred') > -1;
         });
-
+        if (shredMember.length > 0){
+            PostService.getPostsFromCategory(19, 1)
+            .then(function(data){
+                $scope.shreds = data.posts;
+            });  
+        }
         $ionicLoading.hide();
     });  
     
@@ -498,35 +509,77 @@ angular.module('app.controllers', [])
         $ionicLoading.show({
           template: 'Loading 8 week shred...'
         });
-
         ShopService.getDownloads()
-        .then(function(data){   
-            $scope.shreds = data.filter(function(shred){
-                return shred.product.categories.indexOf('8weekshred') > -1;
+        .then(function(data){ 
+            var shredMember = false;
+            shredMember = data.filter(function(shredCheck){
+                return shredCheck.product.categories.indexOf('8weekshred') > -1;
             });
+            if (shredMember.length > 0){
+                PostService.getPostsFromCategory(19, 1)
+                .then(function(data){
+                    $scope.shreds = data.posts;
+                });  
+            }
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');
-        });
-        
+        }); 
 
     };     
     
 })
 
-.controller('ShredCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('ShredCtrl', function($scope, $state, $ionicLoading, ShopService, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
    $ionicLoading.show({
       template: 'Loading video...'
     });
     
     $scope.shred = [];
     var shredId = $stateParams.shredId;
-    ShopService.getDownloads()
-    .then(function(data){   
-        $scope.shred = data.filter(function(shred){
-            return shred.product_id == shredId;
-        })[0];
+    PostService.getPost(shredId)
+    .then(function(data){
+      $scope.shred = data.post;
+      $scope.comments = _.map(data.post.comments, function(comment){
+        if(comment.author){
+          PostService.getUserGravatar(comment.author.id)
+          .then(function(data){
+            comment.user_gravatar = data.avatar;
+          });
+          return comment;
+        }else{
+          return comment;
+        }
+      });
+      $ionicLoading.hide();
+    });    
+    
+  $scope.addComment = function(){
+
+    $ionicLoading.show({
+      template: 'Submiting comment...'
+    });
+
+    PostService.submitComment($scope.shred.id, $scope.new_comment)
+    .then(function(data){
+      if(data.status=="ok"){
+        var user = AuthService.getUser();
+        var comment = {
+          author: {name: user.data.username},
+          content:$scope.new_comment,
+          date: Date.now(),
+          user_gravatar : user.data.avatar,
+          id: data.comment_id
+        };
+        $scope.comments.push(comment);
+        $scope.new_comment = "";
+        $scope.new_comment_id = data.comment_id;
         $ionicLoading.hide();
-    });     
+        // Scroll to new post
+        $ionicScrollDelegate.scrollBottom(true);
+      }
+    });
+  };    
+    
        
 })
 
@@ -638,12 +691,14 @@ angular.module('app.controllers', [])
     
 })
 
-.controller('PlansCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('PlansCtrl', function($scope, $state, $ionicLoading, ShopService, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
     $ionicLoading.show({
       template: 'Loading plans...'
     });
     
     $scope.plans = [];
+    $scope.customPlans = [];
+    var user = AuthService.getUser();
     
     ShopService.getDownloads()
     .then(function(data){   
@@ -653,6 +708,25 @@ angular.module('app.controllers', [])
 
         $ionicLoading.hide();
     });  
+    
+
+    PostService.getPostsFromCategory(20, 1)
+        .then(function(data){
+            $scope.customPlans = data.posts.filter(function(plan){
+                for(var tagIndex in plan.tags){
+                    var tag = plan.tags[tagIndex];
+                    if (parseInt(tag.title) === user.data.id){
+                        return true;
+                    }
+                }
+                return false;
+                });
+                console.log($scope.customPlans);
+        });  
+        
+
+
+      
     
     $scope.doRefresh = function() {
         $ionicLoading.show({
@@ -691,7 +765,22 @@ angular.module('app.controllers', [])
    
 })
 
-.controller('ProductsCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('CustomPlanCtrl', function($scope, $state, $ionicLoading, ShopService, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+   $ionicLoading.show({
+      template: 'Loading plan...'
+    });
+    
+    $scope.customPlan = [];
+    var planId = $stateParams.customPlanId;
+    PostService.getPost(planId)
+    .then(function(data){
+      $scope.customPlan = data.post;
+      $ionicLoading.hide();
+    });
+   
+})
+
+.controller('ProductsCtrl', function($scope, $ionicPopup, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
     $ionicLoading.show({
       template: 'Loading store...'
     });
@@ -717,6 +806,23 @@ console.log(data);
         $scope.$broadcast('scroll.refreshComplete');
     });  
   };    
+  
+  $scope.createOrder = function(productId){
+    $ionicLoading.show({
+      template: 'Purchasing...'
+    });
+    
+    ShopService.createOrder(productId)
+    .then(function(data){
+        var product = data;
+        $ionicLoading.hide();
+        $ionicPopup.alert({
+            title: 'Purchase successful',
+            template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
+        });
+    });       
+  };  
+  
 })
 
 .controller('ProductCtrl', function($scope, $state, $ionicPopup, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
@@ -728,7 +834,6 @@ console.log(data);
     var productId = $stateParams.productId;
     ShopService.getProduct(productId)
     .then(function(data){
-        console.log(data);
         $scope.product = data.product;
         
         $ionicLoading.hide();
@@ -759,56 +864,103 @@ console.log(data);
         $state.go('app.products');
         $ionicPopup.alert({
             title: 'Purchase successful',
-            template: 'Thank you for your purchase! Head over to My eBooks, My videos or My plans to see your purchased items.'
+            template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
         });
     });       
   };
 })
 
-.controller('MessagesCtrl', function($scope, $state, $ionicLoading, PostService, MessageService, $stateParams, AuthService, $ionicScrollDelegate) {
-  $ionicLoading.show({
-    template: 'Loading messages...'
-  });
-  var user = AuthService.getUser();
-  $scope.messages = [];
-  MessageService.getMessages()
-  .then(function(data){
-    $scope.messages = data;
-    $scope.messages = _.map(data, function(message){
-      if(message.sender){
-        PostService.getUserGravatar(message.sender)
-        .then(function(data){
-          message.user_gravatar = data.avatar;
-        });
-        return message;
-      }else{
-        return message;
-      }
+.controller('MessagesCtrl', function($scope, $state, $ionicLoading, PostService, MessageService, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+    $ionicLoading.show({
+      template: 'Loading messages...'
     });
-    $ionicLoading.hide();
-  });
+    var user = AuthService.getUser();
+    $scope.messages = [];
+    $scope.new_message = "";
+    $scope.new_message_id = 0;
+    var avatar = "";
+    //check if user has purchased messaging
+    $scope.sendEnabled = false;
+    ShopService.getDownloads().then(function(data){ 
+        var messageProduct = data.filter(function(msg){
+            return msg.product.categories.indexOf('messaging') > -1;
+        });
+        if (messageProduct.length > 0){
+            $scope.sendEnabled = true;
+        }
+    
+        MessageService.getMessages()
+        .then(function(data){
+          $scope.messages = _.sortBy(data, function(message){ return new Date(message.date + "T" + message.time + "Z"); });
+          $scope.messages = _.map($scope.messages, function(message){
+            if(message.sender){
+              if (avatar.length < 1){
+                PostService.getUserGravatar(message.sender)
+                .then(function(data){
+                  avatar = data.avatar;
+                  message.user_gravatar = data.avatar;
+
+                });
+                }
+                else{
+                  message.user_gravatar = avatar;  
+                }
+              return message;
+            }else{
+              return message;
+            }
+          });
+          $ionicLoading.hide();
+        });
+    });     
+  
+    
+  
   
     $scope.doRefresh = function() {
     $ionicLoading.show({
       template: 'Loading messages...'
     });
-  MessageService.getMessages()
-  .then(function(data){
-    $scope.messages = data;
-    console.log(data);
-    $scope.messages = _.map(data, function(message){
-      if(message.sender){
-        PostService.getUserGravatar(message.sender)
-        .then(function(data){
-          message.user_gravatar = data.avatar;
+    ShopService.getDownloads().then(function(data){ 
+        var messageProduct = data.filter(function(msg){
+            return msg.product.categories.indexOf('messaging') > -1;
         });
-        return message;
-      }else{
-        return message;
-      }
-    });
-    $ionicLoading.hide();
-    $scope.$broadcast('scroll.refreshComplete');
+        if (messageProduct.length > 0){
+            $scope.sendEnabled = true;
+        }
+        else{
+            $scope.sendEnabled = false;
+        }
+           
+        MessageService.getMessages()
+        .then(function(data){
+          $scope.messages = _.sortBy(data, function(message){ return new Date(message.date + "T" + message.time + "Z"); });
+
+          $scope.messages = _.map($scope.messages, function(message){
+            if(message.sender){
+                if (avatar.length < 1){
+                  PostService.getUserGravatar(message.sender)
+                  .then(function(data){
+                    avatar = data.avatar;
+                    message.user_gravatar = data.avatar;
+
+                  });
+                  }
+                  else{
+                    message.user_gravatar = avatar;  
+                  }
+              return message;
+            }else{
+              return message;
+            }
+          });
+
+          $ionicLoading.hide();
+
+          $scope.$broadcast('scroll.refreshComplete');
+
+
+          });     
   });    
 
   }; 
@@ -825,17 +977,23 @@ console.log(data);
     .then(function(data){
       if(data){
         var user = AuthService.getUser();
+
+        $scope.new_message_id = 1;
+        if ($scope.messages.length > 1){
+            $scope.new_message_id = $scope.messages[$scope.messages.length -1].auto + 1;
+        }
         var message = {
           date: Date.now(),
           message: $scope.new_message,
           receiver: "1",
-          sender: user.data.user_id,
+          sender: user.data.id,
           user_gravatar : user.data.avatar,
-          id: data.message_id
+          auto: $scope.new_message_id
         };
+
         $scope.messages.push(message);
         $scope.new_message = "";
-        $scope.new_message_id = data.message_id;
+
         $ionicLoading.hide();
         // Scroll to new post
         $ionicScrollDelegate.scrollBottom(true);

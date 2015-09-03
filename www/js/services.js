@@ -133,6 +133,7 @@ angular.module('app.services', [])
           results:_.map(promise_value.posts, function(post){
             return {
               title: post.title,
+              type: post.type,
               id:post.id,
               date: post.date,
               excerpt: post.excerpt
@@ -153,6 +154,16 @@ angular.module('app.services', [])
     '?search='+ query +
     '&callback=JSON_CALLBACK')
     .success(function(data) {
+
+      data.posts = data.posts.filter(function(post){
+          if (post.categories[0]){
+              return post.categories[0].title.indexOf('8 Week Shred') < 0 && post.categories[0].title.indexOf('Custom Plan') < 0;
+          }
+          else if(post.type === 'product'){
+              return true;
+          }
+          else{return false;}
+      });      
       var promise_value = {
         id : "posts",
         posts : data.posts
@@ -584,8 +595,6 @@ angular.module('app.services', [])
 
     $http.get(WORDPRESS_API2_URL + '?downloads=true&userid=' + user.user_id)
     .success(function(data) {
-        console.log("suc");
-
       deferred.resolve(data);
     })
     .error(function(data) {
@@ -656,7 +665,6 @@ angular.module('app.services', [])
 
     $http.get(WORDPRESS_API3_URL + '?messagesget=true&userid=' + user.user_id)
     .success(function(data) {
-        console.log(data);
 
       deferred.resolve(data);
     })
@@ -674,6 +682,7 @@ angular.module('app.services', [])
         user = JSON.parse(window.localStorage.ionWordpress_user || null);
     $http.post(WORDPRESS_API3_URL, {messagecreate:'true',userid: user.user_id, message:message})    
     .success(function(data) {
+        //console.log({messagecreate:'true',userid: user.user_id, message:message});
       deferred.resolve(data);
     })
     .error(function(data) {

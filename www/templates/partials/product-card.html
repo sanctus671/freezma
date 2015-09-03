@@ -1,14 +1,17 @@
-<div class="card-header">
-  <h1 ng-bind-html="product.title | rawHtml"></h1>
-  <div ng-repeat="category in product.categories">
-      {{category}}
-  </div>
-</div>
-<div class="item item-image" ng-show="product.featured_src">
-    <img ng-src="{{product.featured_src}}">
-</div>
-<div class="card-content" ng-bind-html="product.short_description | rawHtml"></div>
-<div class="card-footer">
-  <a class="card-button secondary" ng-click="">BUY</a>
-  <a class="card-button primary" ui-sref="app.product({productId :product.id})">LEARN MORE</a>
+<div  ng-show="!purchased">
+    <div class="card-header" >
+      <h1 ng-bind-html="product.title | rawHtml"></h1>
+      <div ng-repeat="category in product.categories">
+          {{category}}
+      </div>
+    </div>
+    <div class="item item-image" ng-show="product.featured_src">
+        <img ng-src="{{product.featured_src}}">
+    </div>
+    <div class="card-content" ng-bind-html="product.short_description | rawHtml"></div>
+    <div class="card-footer">
+      <a class="card-button secondary" ng-click="createOrder(product.id);purchased = true">BUY</a>
+      <a class="card-button primary" ui-sref="app.product({productId :product.id})">LEARN MORE</a>
+    </div>
+
 </div>

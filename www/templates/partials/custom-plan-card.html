@@ -1,0 +1,10 @@
+<div class="card-header">
+  <h1 ng-bind-html="customPlan.title | rawHtml"></h1>
+</div>
+<div class="item item-image" ng-show="customPlan.thumbnail">
+    <img ng-src="{{customPlan.thumbnail}}">
+</div>
+<div class="card-content" ng-bind-html="customPlan.content | rawHtml"></div>
+<div class="card-footer">
+  <a class="card-button primary" ui-sref="app.customplan({customPlanId :customPlan.id})">VIEW</a>
+</div>

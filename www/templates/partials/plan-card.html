@@ -1,7 +1,7 @@
 <div class="card-header">
   <h1 ng-bind-html="plan.product.title | rawHtml"></h1>
 </div>
-<div class="item item-image">
+<div class="item item-image" ng-show="plan.product.featured_src">
     <img ng-src="{{plan.product.featured_src}}">
 </div>
 <div class="card-content" ng-bind-html="plan.product.description | rawHtml"></div>

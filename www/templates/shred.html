@@ -1,16 +1,43 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<ion-view class="post-view">
+  <ion-nav-title>
+    <span ng-bind-html="shred.title | rawHtml"></span>
+  </ion-nav-title>
+  <ion-content>
+    <div class="post">
+      <div class="card-header">
+        <h1 ng-bind-html="shred.title | rawHtml"></h1>
+      </div>
+<div ng-if="shred.thumbnail" class="item item-image">
+    <img ng-src="{{shred.thumbnail}}">
+</div>        
+      <div class="card-content" ng-bind-html="shred.content | rawHtml"></div>
+    </div>
+    <div class="post-actions">
+      <a ng-show="shred.comment_count > 0" class="card-button comment-count">
+        <i class="icon ion-chatbox"></i>{{post.comment_count}}
+      </a>
+    </div>
+    <div class="comments">
+      <div class="list">
+        <a class="item item-avatar" ng-repeat="comment in comments" href="#" ng-class="{highlighted: comment.id === new_comment_id}">
+          <img ng-src="{{comment.user_gravatar}}">
+
+          <h2  ng-bind-html="comment.author.name | rawHtml"><span class="comment-date" am-time-ago="comment.date"></span></h2>
+          <p class="message-content" ng-bind-html="comment.content | rawHtml"></p>
+        </a>
+      </div>
+    </div>
+  </ion-content>
+  <ion-footer-bar class="new-comment post-footer bar bar-footer">
+    <form name="comment_form" class="row" novalidate>
+      <div class="col col-80 content col-center">
+        <input class="new-comment-message" type="text" placeholder="Leave a comment..." ng-model="new_comment" required></input>
+      </div>
+      <div class="col col-20 button-container col-center">
+        <button class="button button-clear send" type="submit" ng-click="addComment()" ng-disabled="comment_form.$invalid">
+          Send
+        </button>
+      </div>
+    </form>
+  </ion-footer-bar>
+</ion-view>

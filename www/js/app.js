@@ -251,10 +251,25 @@ angular.module('app', ['ionic', 'app.directives', 'app.controllers', 'app.servic
         controller: 'PlanCtrl'
       }
     },
+    
     data: {
       authenticate: true
     }
   })
+  
+  .state('app.customplan', {
+    url: "/customplans/:customPlanId",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/custom-plan.html",
+        controller: 'CustomPlanCtrl'
+      }
+    },
+    
+    data: {
+      authenticate: true
+    }
+  })  
   
   .state('app.products', {
     url: "/products",

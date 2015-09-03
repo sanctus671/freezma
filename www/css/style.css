@@ -1,5 +1,5 @@
 .bar.app-top-bar{
-    background-color:#FEE900;
+    background-color:black;
 }
 
 .register-view, .login-view, .forgot-password-view, .walkthrough-view{
@@ -43,4 +43,18 @@
 
 .item.item-image{
         margin-bottom: 10px;
+}
+
+.highlighted{
+    background-color: #d7f5df;
+}
+
+.item p.message-content{
+    white-space: initial;
+}
+
+.welcome-card{
+        background-color: #d7f5df !important;
+    padding-bottom: 20px;
+    margin-bottom: 0px !important;
 }

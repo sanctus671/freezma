@@ -1,15 +1,24 @@
-<ion-view class="post-view">
+<ion-view class="post-view bookmarks-view">
   <ion-nav-title>
     Messages
   </ion-nav-title>
   <ion-content>
      <!-- Refresh to get the new posts -->
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
-    </ion-refresher>     
-      
-    <div class="messages">
+    </ion-refresher> 
+     
+    <div ng-if="messages.length < 1" class="row bookmarks-container">
+      <div  class="col col-center">
+        <div class="empty-results">
+          <i class="icon ion-chatbubbles"></i>
+          <h3 class="no-bookmarks">You have no messages!</h3>
+        </div>
+      </div>
+    </div> 
+     
+    <div class="messages" ng-if="messages.length > 1">
       <div class="list card">
-        <div class="item" ng-repeat="message in messages" href="#" ng-class="{highlighted: message.id === new_message_id, 'item-avatar-right': message.receiver == 1, 'item-avatar': message.receiver != 1}">
+        <div class="item" ng-repeat="message in messages" href="#" ng-class="{highlighted: message.auto == new_message_id, 'item-avatar-right': message.receiver == 1, 'item-avatar': message.receiver != 1}">
           <div>
             <img class="item-image" ng-src="{{message.user_gravatar}}">
             <h2  ng-bind-html="user.userName | rawHtml"><span class="comment-date" am-time-ago="message.date + message.time"></span></h2>
@@ -20,10 +29,10 @@
       </div>
     </div>
   </ion-content>
-  <ion-footer-bar class="new-comment post-footer bar bar-footer">
+  <ion-footer-bar class="new-comment post-footer bar bar-footer" ng-show="sendEnabled">
     <form name="message_form" class="row" novalidate>
       <div class="col col-80 content col-center">
-        <input class="new-comment-message" type="text" placeholder="Write a message..." ng-model="new_message" required></input>
+        <input class="new-comment-message" type="text" placeholder="Write a message..." ng-model="new_message" required>
       </div>
       <div class="col col-20 button-container col-center">
         <button class="button button-clear send" type="submit" ng-click="createMessage()" ng-disabled="message_form.$invalid">

@@ -10,13 +10,13 @@
     <div ng-if="shreds.length < 1" class="row bookmarks-container">
       <div  class="col col-center">
         <div class="empty-results">
-          <i class="icon ion-ios-paper"></i>
-          <h3 class="no-bookmarks">You have no videos to view. Go to the store and get some!</h3>
+          <i class="icon ion-ios-calendar"></i>
+          <h3 class="no-bookmarks">You are not an 8 week shred member. Go to the store and become one!</h3>
         </div>
       </div>
     </div>
     <div class="posts">       
-        <div video-card ng-repeat="shred in shreds" class="post-card"></div>
+        <div shred-card ng-repeat="shred in shreds" class="post-card"></div>
     </div>
 
 

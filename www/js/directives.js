@@ -322,11 +322,11 @@ angular.module('app.directives', [])
 				$ionicHistory.nextViewOptions({
 					disableAnimate: true
 				});
-                                if (post.comments){
-                                    $state.go('app.post', {postId: post.id});
+                                if (post.type === "product"){
+                                    $state.go('app.product', {productId: post.id});                                   
                                 }
                                 else{
-                                    $state.go('app.product', {productId: post.id});
+                                    $state.go('app.post', {postId: post.id});
                                 }
 			};
 		},
@@ -362,6 +362,12 @@ angular.module('app.directives', [])
 .directive('planCard', function() {
 	return {
 		templateUrl: 'templates/partials/plan-card.html'
+	};
+})
+
+.directive('customPlanCard', function() {
+	return {
+		templateUrl: 'templates/partials/custom-plan-card.html'
 	};
 })
 

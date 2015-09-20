@@ -7,10 +7,14 @@
       <div class="card-header">
         <h1 ng-bind-html="plan.product.title | rawHtml"></h1>
       </div>
-<div class="item item-image">
+<div class="item item-image" ng-if="plan.product.featured_src">
     <img ng-src="{{plan.product.featured_src}}">
 </div>        
       <div class="card-content" ng-bind-html="plan.product.description | rawHtml"></div>
+      
+<div class="card-footer" ng-if="plan.file.file">   
+      <a class="card-button primary" href="{{plan.file.file}}">VIEW PLAN</a>
+</div>        
     </div>
 
   </ion-content>

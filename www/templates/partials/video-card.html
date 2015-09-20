@@ -1,7 +1,7 @@
 <div class="card-header">
   <h1 ng-bind-html="video.product.title | rawHtml"></h1>
 </div>
-<div class="item item-image">
+<div class="item item-image" ng-if="video.product.featured_src">
     <img ng-src="{{video.product.featured_src}}">
 </div>
 <div class="card-content" ng-bind-html="video.product.short_description | rawHtml"></div>

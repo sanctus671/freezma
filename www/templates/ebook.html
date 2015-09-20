@@ -7,10 +7,15 @@
       <div class="card-header">
         <h1 ng-bind-html="ebook.product.title | rawHtml"></h1>
       </div>
-<div class="item item-image">
+<div class="item item-image" ng-if="ebook.product.featured_src">
     <img ng-src="{{ebook.product.featured_src}}">
 </div>        
       <div class="card-content" ng-bind-html="ebook.product.description | rawHtml"></div>
+      
+<div class="card-footer" ng-if="ebook.file.file">   
+      <a class="card-button primary" href="{{ebook.file.file}}">DOWNLOAD EBOOK</a>
+</div>  
+      
     </div>
 
   </ion-content>

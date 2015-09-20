@@ -7,7 +7,7 @@
       <div class="card-header">
         <h1 ng-bind-html="product.title | rawHtml"></h1>
       </div>
-<div class="item item-image" ng-show="product.featured_src">
+<div class="item item-image" ng-if="product.featured_src">
     <img ng-src="{{product.featured_src}}">
 </div>        
       <div class="card-content" ng-bind-html="product.description | rawHtml"></div>
@@ -17,7 +17,7 @@
   <ion-footer-bar class="new-comment post-footer bar bar-footer">
       <div class="col col-100 button-container col-center">
         <button class="button button-clear send" type="submit" ng-click="createOrder()" ng-disabled="">
-          BUY
+          BUY FOR {{product.price | currency:"$":0}}AUD
         </button>
       </div>
 

@@ -1,13 +1,68 @@
 .bar.app-top-bar{
     background-color:black;
+    background-image:url(../img/HeaderNoLogo.png);
+background-size: 320px 43px;
+    background-position: center center;
+    background-repeat: no-repeat;   
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+    border: none;    
 }
 
+.ff-bg{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-image: url(../img/HeaderGold.PNG);
+    background-size: 320px 43px;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.ff-bg span {
+   display:none;
+}
+
+.main-menu ion-content {
+    background-color: black;
+    background-image:url(../img/SideMenu.png);
+    background-repeat:no-repeat;
+    background-size:230px 660px;
+    background-position: center 110px;
+}
+.main-menu ion-item.item .item-content,.main-menu ion-item.item {
+    background-color: transparent;
+}
+
+.home-view .post-card, .category-view .post-card {
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+}
+
+
+
 .register-view, .login-view, .forgot-password-view, .walkthrough-view{
-    background-color: #2B2B2B;
+    background-color: black;
+    background-image:url(../img/loginbackground.png);
+    background-repeat:no-repeat;
+    background-size:cover;
+    background-position:center 0px;
+    background-attachment:fixed;
+}
+
+.register-view .form-heading, .login-view .form-heading, .forgot-password-view .form-heading {
+    height: 40%;
+}
+.register-view .form-wrapper, .login-view .form-wrapper, .forgot-password-view .form-wrapper {
+    height: 60%;
+}
+
+.register-view .form-title, .login-view .form-title, .forgot-password-view .form-title {
+display:none;
 }
 
 .register-view .input-fields .item, .login-view .input-fields .item, .forgot-password-view .input-fields .item{
-    background-color: #161616;
+        background-color: #000000;
 }
 
 
@@ -41,6 +96,12 @@
     
 }
 
+.walkthrough-logo{
+    width: 100%;
+        max-width: 992px;
+
+}
+
 .item.item-image{
         margin-bottom: 10px;
 }
@@ -53,8 +114,30 @@
     white-space: initial;
 }
 
-.welcome-card{
-        background-color: #d7f5df !important;
-    padding-bottom: 20px;
-    margin-bottom: 0px !important;
+.loading-container .loading {
+        background-color: rgba(0, 0, 0, 0.9);
 }
+
+.post-view .new-comment {
+    background-color: #000000;
+}
+
+.multi-level-push-menu .mp-menu .category-item-container,.multi-level-push-menu .mp-level {
+    background-color: #000000;
+}
+.post .custom-plan-upload{
+    color: #FFA707;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.posts .custom-plan-upload{
+    display:none;
+}
+
+.post-view.message-view ion-content {
+    background: #EAEAEA;
+}
+
+

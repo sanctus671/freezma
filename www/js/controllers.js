@@ -315,6 +315,9 @@ angular.module('app.controllers', [])
 
 // HOME - GET RECENT POSTS
 .controller('HomeCtrl', function($scope, $rootScope, $state, $ionicLoading, PostService) {
+  //angular.element(".bar.app-top-bar").css({"background-image":"url(../img/HeaderGold.PNG)"});  
+    
+    
   $scope.posts = [];
   $scope.page = 1;
   $scope.totalPages = 1;
@@ -911,6 +914,7 @@ console.log(data);
             }
           });
           $ionicLoading.hide();
+          $ionicScrollDelegate.scrollBottom(true);
         });
     });     
   
@@ -921,6 +925,7 @@ console.log(data);
     $ionicLoading.show({
       template: 'Loading messages...'
     });
+    avatar = "";
     ShopService.getDownloads().then(function(data){ 
         var messageProduct = data.filter(function(msg){
             return msg.product.categories.indexOf('messaging') > -1;
@@ -956,9 +961,9 @@ console.log(data);
           });
 
           $ionicLoading.hide();
-
+          
           $scope.$broadcast('scroll.refreshComplete');
-
+          $ionicScrollDelegate.scrollBottom(true);
 
           });     
   });    

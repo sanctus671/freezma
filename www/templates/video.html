@@ -7,10 +7,24 @@
       <div class="card-header">
         <h1 ng-bind-html="video.product.title | rawHtml"></h1>
       </div>
-<div class="item item-image">
+<div class="item item-image" ng-if="video.product.featured_src">
     <img ng-src="{{video.product.featured_src}}">
 </div>        
       <div class="card-content" ng-bind-html="video.product.description | rawHtml"></div>
+      
+<div class="item item-image" ng-if="video.file.file.indexOf('vimeo.com') > -1">   
+      <iframe src="{{video.file.file}}" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> 
+</div>  
+      
+<div class="item item-image" ng-if="video.file.file.indexOf('youtube.com') > -1">   
+      <iframe width="560" height="315" src="{{video.file.file}}" frameborder="0" allowfullscreen></iframe> 
+</div>    
+      
+<div class="card-footer" ng-if="video.file.file.indexOf('youtube.com') < 0 && video.file.file.indexOf('vimeo.com') < 0">   
+      <a class="card-button primary" href="{{video.file.file}}">VIEW VIDEO</a>
+</div>  
+      
+      
     </div>
 
   </ion-content>

@@ -116,6 +116,7 @@ angular.module('app.controllers', [])
                 function(message){/*alert('Failed: ' + message);*/},
                 {
                         quality: 25,
+                        destinationType : Camera.DestinationType.DATA_URL,
                         sourceType: Camera.PictureSourceType.Camera,
                         encodingType: Camera.EncodingType.JPEG,
                         correctOrientation: true,
@@ -141,15 +142,18 @@ angular.module('app.controllers', [])
         options.fileKey="fileToUpload";
         options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
         options.mimeType="image/jpeg";
-        options.params = {userid:$scope.user.userid};
+        options.params = {userid:$scope.data.id};
         console.log($scope.user);
         var ft = new FileTransfer();
         ft.upload(imageURI, encodeURI(WORDPRESS_API4_URL), function(data){
             $ionicLoading.hide();
+            console.log("in success area");
+            console.log(data);
             if (data.result === 'success'){
                 //AuthService.editUserAvatar(data.url);
             }
             else{
+                
                 $ionicPopup.alert({
                 title: 'Error',
                 template: data.msg
@@ -157,6 +161,8 @@ angular.module('app.controllers', [])
             }
         },  
         function(){
+            console.log("in fail area");
+            console.log(data);            
             $ionicLoading.hide();        
             $ionicPopup.alert({
             title: 'Error',

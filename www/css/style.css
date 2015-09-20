@@ -140,4 +140,12 @@ display:none;
     background: #EAEAEA;
 }
 
+.comments .item.item-avatar{
+    width:100%;
+}
+
+.post-actions{
+    min-height:54px;
+}
+
 

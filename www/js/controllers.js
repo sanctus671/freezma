@@ -900,9 +900,6 @@ console.log(data);
 })
 
 .controller('MessagesCtrl', function($scope, $state, $ionicLoading, PostService, MessageService, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
-    $ionicLoading.show({
-      template: 'Loading messages...'
-    });
     var user = AuthService.getUser();
     $scope.messages = [];
     $scope.new_message = "";
@@ -910,39 +907,7 @@ console.log(data);
     var avatar = "";
     //check if user has purchased messaging
     $scope.sendEnabled = false;
-    ShopService.getDownloads().then(function(data){ 
-        var messageProduct = data.filter(function(msg){
-            return msg.product.categories.indexOf('messaging') > -1;
-        });
-        if (messageProduct.length > 0){
-            $scope.sendEnabled = true;
-        }
-    
-        MessageService.getMessages()
-        .then(function(data){
-          $scope.messages = _.sortBy(data, function(message){ return new Date(message.date + "T" + message.time + "Z"); });
-          $scope.messages = _.map($scope.messages, function(message){
-            if(message.sender){
-              if (avatar.length < 1){
-                PostService.getUserGravatar(message.sender)
-                .then(function(data){
-                  avatar = data.avatar;
-                  message.user_gravatar = data.avatar;
-
-                });
-                }
-                else{
-                  message.user_gravatar = avatar;  
-                }
-              return message;
-            }else{
-              return message;
-            }
-          });
-          $ionicLoading.hide();
-          $ionicScrollDelegate.scrollBottom(true);
-        });
-    });     
+     
   
     
   
@@ -995,6 +960,7 @@ console.log(data);
   });    
 
   }; 
+  
 
 
 
@@ -1031,6 +997,8 @@ console.log(data);
       }
     });
   };    
+  
+  $scope.doRefresh();
     
     
 })

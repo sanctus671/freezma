@@ -298,6 +298,7 @@ angular.module('app', ['ionic', 'app.directives', 'app.controllers', 'app.servic
   })
   
   .state('app.messages', {
+      cache: false,
     url: "/messages",
     views: {
       'menuContent': {

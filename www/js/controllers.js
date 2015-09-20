@@ -57,7 +57,7 @@ angular.module('app.controllers', [])
 
 
 // SETTINGS
-.controller('SettingCtrl', function($scope, $ionicActionSheet, $ionicModal, $ionicLoading, $state, AuthService, WORDPRESS_API4_URL) {
+.controller('SettingCtrl', function($scope, $ionicActionSheet, $ionicModal, $ionicPopup, $ionicLoading, $state, AuthService, WORDPRESS_API4_URL) {
   $scope.notifications = false;
   $scope.sendLocation = false;
   $scope.profile = {
@@ -129,6 +129,7 @@ angular.module('app.controllers', [])
   };  
   
   $scope.onPhotoSuccess = function(imageURI){
+      console.log(imageURI);
         $ionicLoading.show({
             template: 'Updating avatar...'
         }); 
@@ -140,8 +141,27 @@ angular.module('app.controllers', [])
         options.fileKey="fileToUpload";
         options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
         options.mimeType="image/jpeg";
+        options.params = {userid:$scope.user.userid};
+        console.log($scope.user);
         var ft = new FileTransfer();
-        ft.upload(imageURI, encodeURI(WORDPRESS_API4_URL), function(){$ionicLoading.hide();},  function(){$ionicLoading.hide();}, options);		
+        ft.upload(imageURI, encodeURI(WORDPRESS_API4_URL), function(data){
+            $ionicLoading.hide();
+            if (data.result === 'success'){
+                //AuthService.editUserAvatar(data.url);
+            }
+            else{
+                $ionicPopup.alert({
+                title: 'Error',
+                template: data.msg
+                });                
+            }
+        },  
+        function(){
+            $ionicLoading.hide();        
+            $ionicPopup.alert({
+            title: 'Error',
+            template: 'Sorry, there was an error uploading your file.'
+            });}, options);		
 		
 	     
   };  

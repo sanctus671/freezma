@@ -520,7 +520,7 @@ angular.module('app.services', [])
     return avatar_dfd.promise;
   };
   
-  this.editUserAvatar = function() {
+  this.editUserAvatar = function(url) {
     var avatar_dfd = $q.defer(),
         authService = this,
         user = JSON.parse(window.localStorage.ionWordpress_user || null);

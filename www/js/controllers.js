@@ -141,7 +141,7 @@ angular.module('app.controllers', [])
         imageAvatar.src = imageURI;
         var options = new FileUploadOptions();
         options.fileKey="fileToUpload";
-        options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
+        options.fileName=$scope.user.data.username;
         options.mimeType="image/jpeg";
         options.params = {userid:$scope.user.data.id};
         console.log($scope.user);
@@ -161,7 +161,7 @@ angular.module('app.controllers', [])
                 });                
             }
         },  
-        function(){
+        function(data){
             console.log("in fail area");
             console.log(data);            
             $ionicLoading.hide();        

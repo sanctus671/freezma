@@ -60,6 +60,7 @@ angular.module('app.controllers', [])
 .controller('SettingCtrl', function($scope, $ionicActionSheet, $ionicModal, $ionicPopup, $ionicLoading, $state, AuthService, WORDPRESS_API4_URL) {
   $scope.notifications = false;
   $scope.sendLocation = false;
+  $scope.user = AuthService.getUser();
   $scope.profile = {
         firstName : null,
         lastName : null,
@@ -130,7 +131,7 @@ angular.module('app.controllers', [])
   };  
   
   $scope.onPhotoSuccess = function(imageURI){
-      console.log(imageURI);
+      //console.log(imageURI);
         $ionicLoading.show({
             template: 'Updating avatar...'
         }); 
@@ -142,7 +143,7 @@ angular.module('app.controllers', [])
         options.fileKey="fileToUpload";
         options.fileName=imageURI.substr(imageURI.lastIndexOf('/')+1);
         options.mimeType="image/jpeg";
-        options.params = {userid:$scope.data.id};
+        options.params = {userid:$scope.user.data.id};
         console.log($scope.user);
         var ft = new FileTransfer();
         ft.upload(imageURI, encodeURI(WORDPRESS_API4_URL), function(data){

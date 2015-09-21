@@ -98,6 +98,7 @@ angular.module('app.controllers', [])
                 function(message){/*alert('Failed: ' + message);*/},
                 {
                         quality: 25,
+                        destinationType : Camera.DestinationType.DATA_URL,
                         sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
                         encodingType: Camera.EncodingType.JPEG,
                         correctOrientation: true
@@ -117,7 +118,6 @@ angular.module('app.controllers', [])
                 function(message){/*alert('Failed: ' + message);*/},
                 {
                         quality: 25,
-                        destinationType : Camera.DestinationType.DATA_URL,
                         sourceType: Camera.PictureSourceType.Camera,
                         encodingType: Camera.EncodingType.JPEG,
                         correctOrientation: true,

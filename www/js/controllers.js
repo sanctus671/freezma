@@ -98,7 +98,6 @@ angular.module('app.controllers', [])
                 function(message){/*alert('Failed: ' + message);*/},
                 {
                         quality: 25,
-                        destinationType : Camera.DestinationType.DATA_URL,
                         sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
                         encodingType: Camera.EncodingType.JPEG,
                         correctOrientation: true
@@ -131,14 +130,11 @@ angular.module('app.controllers', [])
   };  
   
   $scope.onPhotoSuccess = function(imageURI){
-      //console.log(imageURI);
+      console.log(imageURI);
         $ionicLoading.show({
             template: 'Updating avatar...'
         }); 
-	var imageMenu = document.getElementById('menu-avatar');
-        var imageAvatar = document.getElementById('image-avatar');
-	imageMenu.src = imageURI;
-        imageAvatar.src = imageURI;
+
         var options = new FileUploadOptions();
         options.fileKey="fileToUpload";
         options.fileName=$scope.user.data.username;
@@ -146,11 +142,15 @@ angular.module('app.controllers', [])
         options.params = {userid:$scope.user.data.id};
         console.log($scope.user);
         var ft = new FileTransfer();
-        ft.upload(imageURI, encodeURI(WORDPRESS_API4_URL), function(data){
+        ft.upload(imageURI, encodeURI(WORDPRESS_API4_URL), function(response){
             $ionicLoading.hide();
             console.log("in success area");
-            console.log(data);
+            var data = JSON.parse(response.response);
             if (data.result === 'success'){
+                var imageMenu = document.getElementById('menu-avatar');
+                var imageAvatar = document.getElementById('image-avatar');
+                imageMenu.src = imageURI;
+                imageAvatar.src = imageURI;                
                 //AuthService.editUserAvatar(data.url);
             }
             else{

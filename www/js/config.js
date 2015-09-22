@@ -8,12 +8,12 @@ angular.module('app.config', [])
 .constant('shopSettings',{
    
    
-   payPalSandboxId : 'sand box id here',
-   payPalProductionId : 'production id here',
+   payPalSandboxId : 'APP-80W284485P519543T',
+   payPalProductionId : 'AVKekBRKiA8UG4cGOsBtxRX4wCPvA46144rkxeScIB3vYVA.Tb7Ea-PW',
    payPalEnv: 'PayPalEnvironmentSandbox',   // for testing  production for production
-   payPalShopName : 'MyShopName',
-   payPalMerchantPrivacyPolicyURL : 'url to policy',
-   payPalMerchantUserAgreementURL : ' url to user agreement '
+   payPalShopName : 'Freezma Fitness',
+   payPalMerchantPrivacyPolicyURL : 'http://freezmafitness.com/index.php?page=contact',
+   payPalMerchantUserAgreementURL : ' http://freezmafitness.com/index.php?page=contact'
    
    
    

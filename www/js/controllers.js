@@ -855,7 +855,7 @@ console.log(data);
   
 })
 
-.controller('ProductCtrl', function($scope, $state, $ionicPopup, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('ProductCtrl', function($scope, $state, $ionicPopup, $ionicLoading, ShopService, $stateParams, PaypalService) {
     $ionicLoading.show({
       template: 'Loading item...'
     });
@@ -883,20 +883,25 @@ console.log(data);
   };  
   
   $scope.createOrder = function(){
-    $ionicLoading.show({
-      template: 'Purchasing...'
+    PaypalService.initPaymentUI().then(function () {
+        PaypalService.makePayment($scope.product.price, "Total").then(function(){
+            $ionicLoading.show({
+              template: 'Purchasing...'
+            });
+
+
+            ShopService.createOrder(productId)
+            .then(function(data){
+                $scope.product = data;
+                $ionicLoading.hide();
+                $state.go('app.products');
+                $ionicPopup.alert({
+                    title: 'Purchase successful',
+                    template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
+                });
+            });  
     });
-    
-    ShopService.createOrder(productId)
-    .then(function(data){
-        $scope.product = data;
-        $ionicLoading.hide();
-        $state.go('app.products');
-        $ionicPopup.alert({
-            title: 'Purchase successful',
-            template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
-        });
-    });       
+    });
   };
 })
 

@@ -8,8 +8,8 @@ angular.module('app.config', [])
 .constant('shopSettings',{
    
    
-   payPalSandboxId : 'APP-80W284485P519543T',
-   payPalProductionId : 'AVKekBRKiA8UG4cGOsBtxRX4wCPvA46144rkxeScIB3vYVA.Tb7Ea-PW',
+   payPalSandboxId : 'AQcyNKJrVWMe0kYazfLUEwQs4Z1NOBb9QwN8RLFbY07oxa9YzmqfBLe8OgNoIWaBuE1hiBK9k8slXi2b',
+   payPalProductionId : 'AbTCp5C_a1Pu3yfv_Sxb2se4c_SnjF_tHqXFuLvZA_Kd-EZL1EHcv5MTnWwZ8nC48sPlWffvTJYziKOR',
    payPalEnv: 'PayPalEnvironmentSandbox',   // for testing  production for production
    payPalShopName : 'Freezma Fitness',
    payPalMerchantPrivacyPolicyURL : 'http://freezmafitness.com/index.php?page=contact',

@@ -970,6 +970,7 @@ console.log(data);
   
   $scope.createOrder = function(){
     PaypalService.initPaymentUI().then(function () {
+        console.log("here");console.log($scope.product);
         PaypalService.makePayment($scope.product.price, $scope.product.title).then(function(){
             $ionicLoading.show({
               template: 'Purchasing...'

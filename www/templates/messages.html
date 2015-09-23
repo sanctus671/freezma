@@ -16,7 +16,7 @@
       </div>
     </div> 
      
-    <div class="messages" ng-if="messages.length > 1">
+    <div class="messages" ng-if="messages.length > 0">
       <div class="list card">
         <div class="item" ng-repeat="message in messages" href="#" ng-class="{highlighted: message.auto == new_message_id, 'item-avatar-right': message.receiver == 3, 'item-avatar': message.receiver != 3}">
           <div>

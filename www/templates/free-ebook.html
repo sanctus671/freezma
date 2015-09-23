@@ -1,0 +1,23 @@
+<ion-view class="post-view">
+  <ion-nav-title>
+    <span ng-bind-html="ebook.title | rawHtml"></span>
+  </ion-nav-title>
+  <ion-content>
+    <div class="post">
+      <div class="card-header">
+        <h1 ng-bind-html="ebook.title | rawHtml"></h1>
+      </div>
+<div class="item item-image" ng-if="ebook.featured_src">
+    <img ng-src="{{ebook.featured_src}}">
+</div>        
+      <div class="card-content" ng-bind-html="ebook.description | rawHtml"></div>
+      
+<div class="card-footer" ng-if="ebook.file.file">   
+      <a class="card-button primary" href="{{ebook.file.file}}">DOWNLOAD EBOOK</a>
+</div>  
+      
+    </div>
+
+  </ion-content>
+
+</ion-view>

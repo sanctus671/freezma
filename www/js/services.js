@@ -638,6 +638,21 @@ angular.module('app.services', [])
     return deferred.promise;
   };  
   
+  this.getAllProducts = function() {
+    var deferred = $q.defer();
+    $http.get(WORDPRESS_API2_URL + '?products=true')
+    .success(function(data) {
+        
+      deferred.resolve(data);
+    })
+    .error(function(data) {
+
+      deferred.reject(data);
+    });
+
+    return deferred.promise;
+  };   
+  
   this.getProduct = function(productid) {
     var deferred = $q.defer();
     

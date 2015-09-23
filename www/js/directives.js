@@ -359,6 +359,12 @@ angular.module('app.directives', [])
 	};
 })
 
+.directive('freeEbookCard', function() {
+	return {
+		templateUrl: 'templates/partials/free-ebook-card.html'
+	};
+})
+
 .directive('planCard', function() {
 	return {
 		templateUrl: 'templates/partials/plan-card.html'
@@ -374,6 +380,12 @@ angular.module('app.directives', [])
 .directive('videoCard', function() {
 	return {
 		templateUrl: 'templates/partials/video-card.html'
+	};
+})
+
+.directive('freeVideoCard', function() {
+	return {
+		templateUrl: 'templates/partials/free-video-card.html'
 	};
 })
 

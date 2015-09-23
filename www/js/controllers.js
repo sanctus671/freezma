@@ -623,12 +623,20 @@ console.log(data);
     
     ShopService.getDownloads()
     .then(function(data){   
+        console.log(data);
         $scope.ebooks = data.filter(function(ebook){
             return ebook.product.categories.indexOf('ebooks') > -1;
         });
 
         $ionicLoading.hide();
     });  
+    
+    ShopService.getAllProducts()
+    .then(function(data){   //quietly load all the free products otherwise page will take too long to load
+        $scope.freeEbooks = data.filter(function(ebook){
+            return ebook.categories.indexOf('ebooks') > -1 && ebook.price <= 0;
+        });
+    });      
     
     $scope.doRefresh = function() {
         $ionicLoading.show({
@@ -643,6 +651,13 @@ console.log(data);
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');
         });
+
+        ShopService.getAllProducts()
+        .then(function(data){   //quietly load all the free products
+            $scope.freeEbooks = data.filter(function(ebook){
+                return ebook.categories.indexOf('ebooks') > -1 && ebook.price <= 0;
+            });
+        });         
         
 
     };     
@@ -666,6 +681,27 @@ console.log(data);
        
 })
 
+.controller('FreeEbookCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+   $ionicLoading.show({
+      template: 'Loading ebook...'
+    });
+    
+    $scope.ebook = [];
+    var ebookId = $stateParams.ebookId;
+    ShopService.getProduct(ebookId)
+    .then(function(data){
+        if (data.product.price <= 0){
+            $scope.ebook = data.product;
+            if ($scope.ebook.downloads.length > 0){
+                $scope.ebook.file = $scope.ebook.downloads[0];
+            }
+        }
+        $ionicLoading.hide();
+    });     
+    
+    
+})
+
 .controller('VideosCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
     $ionicLoading.show({
       template: 'Loading videos...'
@@ -682,6 +718,13 @@ console.log(data);
         $ionicLoading.hide();
     });  
     
+    ShopService.getAllProducts()
+    .then(function(data){   //quietly load all the free products otherwise page will take too long to load
+        $scope.freeVideos = data.filter(function(video){
+            return video.categories.indexOf('videos') > -1 && video.price <= 0;
+        });
+    });       
+    
     $scope.doRefresh = function() {
         $ionicLoading.show({
           template: 'Loading videos...'
@@ -695,6 +738,13 @@ console.log(data);
             $ionicLoading.hide();
             $scope.$broadcast('scroll.refreshComplete');
         });
+
+        ShopService.getAllProducts()
+        .then(function(data){   //quietly load all the free products otherwise page will take too long to load
+            $scope.freeVideos = data.filter(function(video){
+                return video.categories.indexOf('videos') > -1 && video.price <= 0;
+            });
+        });         
         
 
     };     
@@ -715,6 +765,28 @@ console.log(data);
             return video.product_id == videoId;
         })[0];
         console.log($scope.video);
+        $ionicLoading.hide();
+    });     
+    
+    
+})
+
+.controller('FreeVideoCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+   $ionicLoading.show({
+      template: 'Loading video...'
+    });
+    
+    $scope.video = [];
+    var videoId = $stateParams.videoId;
+    ShopService.getProduct(videoId)
+    .then(function(data){
+        if (data.product.price <= 0){
+            $scope.video = data.product;
+            if ($scope.video.downloads.length > 0){
+                $scope.video.file = $scope.video.downloads[0];
+            }    
+    
+        }
         $ionicLoading.hide();
     });     
     
@@ -810,7 +882,7 @@ console.log(data);
    
 })
 
-.controller('ProductsCtrl', function($scope, $ionicPopup, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('ProductsCtrl', function($scope, $ionicPopup, $state, $ionicLoading, ShopService, $rootScope, $stateParams, AuthService, PaypalService) {
     $ionicLoading.show({
       template: 'Loading store...'
     });
@@ -820,7 +892,6 @@ console.log(data);
     ShopService.getProducts()
     .then(function(data){
         $scope.products = data;
-console.log(data);
         $ionicLoading.hide();
     });      
     
@@ -837,25 +908,39 @@ console.log(data);
     });  
   };    
   
-  $scope.createOrder = function(productId){
-    $ionicLoading.show({
-      template: 'Purchasing...'
-    });
+  $scope.createOrder = function(product){
+    PaypalService.initPaymentUI().then(function () {
+        PaypalService.makePayment(product.price, $scope.product.title).then(function(){      
+            $ionicLoading.show({
+              template: 'Purchasing...'
+            });
+            
     
-    ShopService.createOrder(productId)
-    .then(function(data){
-        var product = data;
-        $ionicLoading.hide();
-        $ionicPopup.alert({
-            title: 'Purchase successful',
-            template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
+            ShopService.createOrder(product.id)
+            .then(function(data){
+                var product = data;
+                $ionicLoading.hide();
+                $ionicPopup.alert({
+                    title: 'Purchase successful',
+                    template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
+                });
+            });   
         });
-    });       
+    });
   };  
+  
+  $rootScope.$on('productPurchased',function(event,data){ //detecting when a product has been purchased in the ProductCtrl
+      for (var index in $scope.products){
+          if ($scope.products[index].id === data.productId){
+              $scope.products.splice(index, 1);
+              return;
+          }
+      }
+  })
   
 })
 
-.controller('ProductCtrl', function($scope, $state, $ionicPopup, $ionicLoading, ShopService, $stateParams, PaypalService) {
+.controller('ProductCtrl', function($scope, $state, $ionicPopup, $ionicLoading, ShopService, $rootScope, $stateParams, PaypalService) {
     $ionicLoading.show({
       template: 'Loading item...'
     });
@@ -884,7 +969,7 @@ console.log(data);
   
   $scope.createOrder = function(){
     PaypalService.initPaymentUI().then(function () {
-        PaypalService.makePayment($scope.product.price, "Total").then(function(){
+        PaypalService.makePayment($scope.product.price, $scope.product.title).then(function(){
             $ionicLoading.show({
               template: 'Purchasing...'
             });
@@ -892,6 +977,7 @@ console.log(data);
 
             ShopService.createOrder(productId)
             .then(function(data){
+                $rootScope.$broadcast('productPurchased',{productId:productId}); //send event for ProductsCtrl
                 $scope.product = data;
                 $ionicLoading.hide();
                 $state.go('app.products');
@@ -988,7 +1074,7 @@ console.log(data);
         var message = {
           date: Date.now(),
           message: $scope.new_message,
-          receiver: "1",
+          receiver: "3",
           sender: user.data.id,
           user_gravatar : user.data.avatar,
           auto: $scope.new_message_id

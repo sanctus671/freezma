@@ -204,6 +204,19 @@ angular.module('app', ['ionic', 'app.directives', 'app.controllers', 'app.servic
     }
   })
   
+  .state('app.freeebook', {
+    url: "/freeebooks/:ebookId",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/free-ebook.html",
+        controller: 'FreeEbookCtrl'
+      }
+    },
+    data: {
+      authenticate: true
+    }
+  })  
+  
   .state('app.videos', {
     url: "/videos",
     views: {
@@ -229,6 +242,19 @@ angular.module('app', ['ionic', 'app.directives', 'app.controllers', 'app.servic
       authenticate: true
     }
   })
+  
+  .state('app.freevideo', {
+    url: "/freevideos/:videoId",
+    views: {
+      'menuContent': {
+        templateUrl: "templates/free-video.html",
+        controller: 'FreeVideoCtrl'
+      }
+    },
+    data: {
+      authenticate: true
+    }
+  })  
   
   .state('app.plans', {
     url: "/plans",

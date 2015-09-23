@@ -910,7 +910,7 @@ console.log(data);
   
   $scope.createOrder = function(product){
     PaypalService.initPaymentUI().then(function () {
-        PaypalService.makePayment(product.price, $scope.product.title).then(function(){      
+        PaypalService.makePayment(product.price, product.title).then(function(){      
             $ionicLoading.show({
               template: 'Purchasing...'
             });
@@ -919,6 +919,7 @@ console.log(data);
             ShopService.createOrder(product.id)
             .then(function(data){
                 var product = data;
+                $rootScope.$broadcast('productPurchased',{productId:product.id}); //send event for ProductsCtrl
                 $ionicLoading.hide();
                 $ionicPopup.alert({
                     title: 'Purchase successful',

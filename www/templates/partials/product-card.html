@@ -1,4 +1,4 @@
-<div  ng-show="!purchased">
+<div>
     <div class="card-header" >
       <h1 ng-bind-html="product.title | rawHtml"></h1>
       <div ng-repeat="category in product.categories">
@@ -10,7 +10,7 @@
     </div>
     <div class="card-content" ng-bind-html="product.short_description | rawHtml"></div>
     <div class="card-footer">
-      <a class="card-button secondary" ng-click="createOrder(product);purchased = true">BUY FOR {{product.price | currency:"$":0}}AUD</a>
+      <a class="card-button secondary" ng-click="createOrder(product)">BUY FOR {{product.price | currency:"$":0}}AUD</a>
       <a class="card-button primary" ui-sref="app.product({productId :product.id})">LEARN MORE</a>
     </div>
 

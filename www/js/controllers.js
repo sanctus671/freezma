@@ -888,9 +888,10 @@ console.log(data);
     });
     
     $scope.products = [];
-    
+    $scope.product = {};
     ShopService.getProducts()
     .then(function(data){
+        console.log(data);
         $scope.products = data;
         $ionicLoading.hide();
     });      
@@ -909,17 +910,18 @@ console.log(data);
   };    
   
   $scope.createOrder = function(product){
+    $scope.product = product;
     PaypalService.initPaymentUI().then(function () {
-        PaypalService.makePayment(product.price, product.title).then(function(){      
+        PaypalService.makePayment($scope.product.price, $scope.product.title).then(function(){      
             $ionicLoading.show({
               template: 'Purchasing...'
             });
             
     
-            ShopService.createOrder(product.id)
+            ShopService.createOrder($scope.product.id)
             .then(function(data){
                 var product = data;
-                $rootScope.$broadcast('productPurchased',{productId:product.id}); //send event for ProductsCtrl
+                $rootScope.$broadcast('productPurchased',{productId:$scope.product.id}); //send event for ProductsCtrl
                 $ionicLoading.hide();
                 $ionicPopup.alert({
                     title: 'Purchase successful',
@@ -931,6 +933,9 @@ console.log(data);
   };  
   
   $rootScope.$on('productPurchased',function(event,data){ //detecting when a product has been purchased in the ProductCtrl
+      console.log(data);
+      console.log($scope.products);
+      
       for (var index in $scope.products){
           if ($scope.products[index].id === data.productId){
               $scope.products.splice(index, 1);
@@ -970,16 +975,15 @@ console.log(data);
   
   $scope.createOrder = function(){
     PaypalService.initPaymentUI().then(function () {
-        console.log("here");console.log($scope.product);
         PaypalService.makePayment($scope.product.price, $scope.product.title).then(function(){
             $ionicLoading.show({
               template: 'Purchasing...'
             });
 
 
-            ShopService.createOrder(productId)
+            ShopService.createOrder($scope.product.id)
             .then(function(data){
-                $rootScope.$broadcast('productPurchased',{productId:productId}); //send event for ProductsCtrl
+                $rootScope.$broadcast('productPurchased',{productId:$scope.product.id}); //send event for ProductsCtrl
                 $scope.product = data;
                 $ionicLoading.hide();
                 $state.go('app.products');

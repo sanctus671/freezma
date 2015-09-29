@@ -27,18 +27,18 @@
     <preference name="android-installLocation" value="auto" />
 	
 
-    <gap:plugin name="org.apache.cordova.camera" />
-    <gap:plugin name="org.apache.cordova.file" />
-    <gap:plugin name="org.apache.cordova.file-transfer" />
-    <gap:plugin name="org.apache.cordova.splashscreen" />
-	<gap:plugin name="nl.x-services.plugins.socialsharing" />	
-	<gap:plugin name="com.ionic.keyboard" />	
-	<gap:plugin name="com.paypal.cordova.mobilesdk" />	
-	<gap:plugin name="de.appplant.cordova.plugin.email-composer" />	
-	<gap:plugin name="org.apache.cordova.console" />	
-	<gap:plugin name="org.apache.cordova.device" />	
-	<gap:plugin name="org.apache.cordova.dialogs" />	
-	<gap:plugin name="org.apache.cordova.globalization" />	
+    <gap:plugin name="org.apache.cordova.camera" source="npm"/>
+    <gap:plugin name="org.apache.cordova.file" source="npm"/>
+    <gap:plugin name="org.apache.cordova.file-transfer" source="npm"/>
+    <gap:plugin name="org.apache.cordova.splashscreen" source="npm"/>
+	<gap:plugin name="nl.x-services.plugins.socialsharing" source="npm"/>	
+	<gap:plugin name="com.ionic.keyboard" source="npm"/>	
+	<gap:plugin name="com.paypal.cordova.mobilesdk" source="npm"/>	
+	<gap:plugin name="de.appplant.cordova.plugin.email-composer" source="npm"/>	
+	<gap:plugin name="org.apache.cordova.console" source="npm"/>	
+	<gap:plugin name="org.apache.cordova.device" source="npm"/>	
+	<gap:plugin name="org.apache.cordova.dialogs" source="npm"/>	
+	<gap:plugin name="org.apache.cordova.globalization" source="npm"/>	
 	<gap:plugin name="org.apache.cordova.inappbrowser" source="npm"/>	
 
     <icon src="resources/icon.png" />

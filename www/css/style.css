@@ -42,13 +42,15 @@ background-size: 320px 43px;
 
 
 .register-view, .login-view, .forgot-password-view, .walkthrough-view{
-    background-color: black;
-    background-image:url(../img/loginbackground.png);
-    background-repeat:no-repeat;
-    background-size:cover;
-    background-position:center 0px;
-    background-attachment:fixed;
+        background-color: black;
+    background-image: url(../img/loginbackground.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center 0px;
+    background-attachment: fixed;
 }
+
+
 
 .register-view .form-heading, .login-view .form-heading, .forgot-password-view .form-heading {
     height: 40%;
@@ -89,10 +91,8 @@ display:none;
 }
 
 .walkthrough-view .scroll-content{
-    background-image:url(../img/appbg.png); 
- -webkit-background-size: cover;
-    -moz-background-size: cover;
-    background-size: cover;
+    background-color:black;
+
     
 }
 
@@ -153,3 +153,69 @@ display:none;
 }
 
 
+/*BLACK THEME */
+
+*{
+    box-shadow: none !important;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
+    color:white;
+}
+/*posts*/
+.home-view ion-content, .category-view ion-content,.bookmarks-view,.post-view.message-view ion-content,.settings-view, .item-stacked-label input, .item-stacked-label textarea, .item-select select{
+    background-color:#161616;
+}
+
+.home-view .post-card, .category-view .post-card, .bar{
+        background: #000000;
+        border-color:black;
+}
+
+.home-view .author, .category-view .author, .post-view .author{
+    color:#FFA500;
+}
+
+.home-view h1, .category-view h1{
+    color:white;
+}
+
+*,.post-view .comments h2,p.message-content.ng-binding,textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"] {
+    color: #ABABAB;
+}
+
+.home-view .card-footer, .category-view .card-footer{
+        border-top: 1px solid #161616;
+}
+/*single post */
+.post-view ion-content,.post-view .post, .post-view .post-actions, .item {
+    background: #161616;
+}
+
+.item.activated{
+    background: #1B1B1B;
+    border-color:#212121;
+
+}
+.post-view .post-actions, .item{
+        border-color: #212121;
+}
+
+
+
+.messages .item{
+    background-color:#000000;
+}
+
+.action-sheet .button{
+        border-color: #0D0D0D;
+}
+
+.action-sheet-options,.action-sheet-group {
+    background: #000000;
+}
+
+.action-sheet .button.activated {
+        background: #020202;
+    border-color:#212121;
+}

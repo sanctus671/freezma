@@ -10,7 +10,7 @@ angular.module('app.config', [])
    
    payPalSandboxId : 'AQcyNKJrVWMe0kYazfLUEwQs4Z1NOBb9QwN8RLFbY07oxa9YzmqfBLe8OgNoIWaBuE1hiBK9k8slXi2b',
    payPalProductionId : 'AbTCp5C_a1Pu3yfv_Sxb2se4c_SnjF_tHqXFuLvZA_Kd-EZL1EHcv5MTnWwZ8nC48sPlWffvTJYziKOR',
-   payPalEnv: 'PayPalEnvironmentSandbox',   // for testing  production for production
+   payPalEnv: 'PayPalEnvironmentProduction',   // 'PayPalEnvironmentSandbox' for testing  production for production
    payPalShopName : 'Freezma Fitness',
    payPalMerchantPrivacyPolicyURL : 'http://freezmafitness.com/index.php?page=contact',
    payPalMerchantUserAgreementURL : ' http://freezmafitness.com/index.php?page=contact'

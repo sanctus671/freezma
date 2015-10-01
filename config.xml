@@ -41,7 +41,6 @@
 	<gap:plugin name="org.apache.cordova.dialogs"/>	
 	<gap:plugin name="org.apache.cordova.globalization" />	
 	<gap:plugin name="org.apache.cordova.inappbrowser"/>	
-	<gap:plugin name="ionic-plugin-keyboard"/>
 
     <icon src="resources/icon.png" />
 	

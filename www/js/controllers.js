@@ -704,7 +704,7 @@ console.log(data);
     });    
     
     $scope.openFile = function(url){
-        cordova.InAppBrowser.open(url, "_system");
+        window.open(url, "_blank");
     }
     
     

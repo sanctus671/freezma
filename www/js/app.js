@@ -41,7 +41,7 @@ angular.module('app', ['ionic', 'app.directives', 'app.controllers', 'app.servic
       StatusBar.styleDefault();
     }
 
-    window.open = cordova.InAppBrowser.open;
+
 
 
 

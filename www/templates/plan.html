@@ -13,7 +13,7 @@
       <div class="card-content" ng-bind-html="plan.product.description | rawHtml"></div>
       
 <div class="card-footer" ng-if="plan.file.file">   
-      <a class="card-button primary" href="{{plan.file.file}}">VIEW PLAN</a>
+      <a class="card-button primary" ng-click="openFile(plan.file.file);">VIEW PLAN</a>
 </div>        
     </div>
 

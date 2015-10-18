@@ -13,7 +13,7 @@
       <div class="card-content" ng-bind-html="ebook.product.description | rawHtml"></div>
       
 <div class="card-footer" ng-if="ebook.file.file">   
-      <a class="card-button primary" href="{{ebook.file.file}}">DOWNLOAD EBOOK</a>
+      <a class="card-button primary" ng-click="openFile(ebook.file.file);">DOWNLOAD EBOOK</a>
 </div>  
       
     </div>

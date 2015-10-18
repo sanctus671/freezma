@@ -611,6 +611,10 @@ console.log(data);
       }
     });
   };    
+  
+    $scope.openFile = function(url){
+        window.open(url, "_system");
+    }   
     
        
 })
@@ -681,7 +685,11 @@ console.log(data);
             return ebook.product_id == ebookId;
         })[0];
         $ionicLoading.hide();
-    });     
+    });   
+    
+    $scope.openFile = function(url){
+        window.open(url, "_system");
+    }     
        
 })
 
@@ -704,7 +712,7 @@ console.log(data);
     });    
     
     $scope.openFile = function(url){
-        window.open(url, "_blank");
+        window.open(url, "_system");
     }
     
     
@@ -774,7 +782,11 @@ console.log(data);
         })[0];
         console.log($scope.video);
         $ionicLoading.hide();
-    });     
+    });    
+    
+    $scope.openFile = function(url){
+        window.open(url, "_system");
+    }    
     
     
 })
@@ -796,7 +808,11 @@ console.log(data);
     
         }
         $ionicLoading.hide();
-    });     
+    });   
+    
+    $scope.openFile = function(url){
+        window.open(url, "_system");
+    }    
     
     
 })
@@ -871,7 +887,11 @@ console.log(data);
             return plan.product_id == planId;
         })[0];
         $ionicLoading.hide();
-    });     
+    });   
+    
+    $scope.openFile = function(url){
+        window.open(url, "_system");
+    }    
    
 })
 
@@ -889,8 +909,9 @@ console.log(data);
       $timeout(function(){
           angular.element("a.custom-plan-upload").click(function(e){
               e.preventDefault();
-              console.log(angular.element(e.target).attr("href"));
-              cordova.InAppBrowser.open(angular.element(e.target).attr("href"), "_system");
+              if (angular.element(e.target).attr("href")){
+                window.open(angular.element(e.target).attr("href"), "_system");
+              }
               
           });
       },100);

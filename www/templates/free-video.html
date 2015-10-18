@@ -21,7 +21,7 @@
 </div>    
       
 <div class="card-footer" ng-if="video.file.file.indexOf('youtube.com') < 0 && video.file.file.indexOf('vimeo.com') < 0">   
-      <a class="card-button primary" href="{{video.file.file}}">VIEW VIDEO</a>
+      <a class="card-button primary" ng-click="openFile(video.file.file);">VIEW VIDEO</a>
 </div>  
       
       

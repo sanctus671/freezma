@@ -948,8 +948,8 @@ console.log(data);
   
   $scope.createOrder = function(product){
     $scope.product = product;
-    //PaypalService.initPaymentUI().then(function () {
-        //PaypalService.makePayment($scope.product.price, $scope.product.title).then(function(){      
+    PaypalService.initPaymentUI().then(function () {
+        PaypalService.makePayment($scope.product.price, $scope.product.title).then(function(){      
             $ionicLoading.show({
               template: 'Purchasing...'
             });
@@ -957,7 +957,6 @@ console.log(data);
     
             ShopService.createOrder($scope.product.id)
             .then(function(data){
-                var product = data;
                 $rootScope.$broadcast('productPurchased',{productId:$scope.product.id}); //send event for ProductsCtrl
                 $ionicLoading.hide();
                 $ionicPopup.alert({
@@ -965,8 +964,8 @@ console.log(data);
                     template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
                 });
             });   
-        //});
-    //});
+        });
+    });
   };  
   
   $rootScope.$on('productPurchased',function(event,data){ //detecting when a product has been purchased in the ProductCtrl

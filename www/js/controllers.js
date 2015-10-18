@@ -948,6 +948,9 @@ console.log(data);
   
   $scope.createOrder = function(product){
     $scope.product = product;
+    window.open($scope.product.permalink, "_blank", "location=no");
+    
+    /*
     PaypalService.initPaymentUI().then(function () {
         PaypalService.makePayment($scope.product.price, $scope.product.title).then(function(){      
             $ionicLoading.show({
@@ -966,6 +969,7 @@ console.log(data);
             });   
         });
     });
+    */
   };  
   
   $rootScope.$on('productPurchased',function(event,data){ //detecting when a product has been purchased in the ProductCtrl
@@ -1010,6 +1014,8 @@ console.log(data);
   };  
   
   $scope.createOrder = function(){
+      window.open($scope.product.permalink, "_blank", "location=no");
+      /*
     PaypalService.initPaymentUI().then(function () {
         PaypalService.makePayment($scope.product.price, $scope.product.title).then(function(){
             $ionicLoading.show({
@@ -1029,7 +1035,9 @@ console.log(data);
                 });
             });  
     });
+    
     });
+    */
   };
 })
 

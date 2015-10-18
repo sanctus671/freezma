@@ -21,7 +21,7 @@ angular.module('app', ['ionic', 'app.directives', 'app.controllers', 'app.servic
       if(response === true)
       {
         //update user avatar and go on
-        AuthService.updateUserAvatar();
+        //AuthService.updateUserAvatar();
 
         $state.go('app.home');
       }
@@ -40,6 +40,8 @@ angular.module('app', ['ionic', 'app.directives', 'app.controllers', 'app.servic
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+
+    window.open = cordova.InAppBrowser.open;
 
 
 

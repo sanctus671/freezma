@@ -508,8 +508,10 @@ angular.module('app.directives', [])
         }
       }
     };
-  }]);
+  }])
+  
 
 
 
-;
+
+

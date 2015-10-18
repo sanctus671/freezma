@@ -27,7 +27,18 @@ angular.module('app.services', [])
     '&type=full' +
     '&callback=JSON_CALLBACK')
     .success(function(data) {
-      deferred.resolve(data);
+        var imageURI = "";
+        var image = new Image();
+        image.setAttribute('crossOrigin', 'anonymous');
+        image.onload = function () {
+            var canvas = document.createElement('canvas');
+            canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
+            canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
+            canvas.getContext('2d').drawImage(this, 0, 0);
+            imageURI = canvas.toDataURL('image/jpg');
+            deferred.resolve(imageURI);
+        };
+        image.src = data.avatar;    
     })
     .error(function(data) {
       deferred.reject(data);
@@ -443,7 +454,18 @@ angular.module('app.services', [])
     '&type=full' +
     '&callback=JSON_CALLBACK')
     .success(function(data) {
-      deferred.resolve(data);
+        var imageURI = "";
+        var image = new Image();
+        image.setAttribute('crossOrigin', 'anonymous');
+        image.onload = function () {
+            var canvas = document.createElement('canvas');
+            canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
+            canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
+            canvas.getContext('2d').drawImage(this, 0, 0);
+            imageURI = canvas.toDataURL('image/jpg');
+            deferred.resolve(imageURI);
+        };
+        image.src = data.avatar;          
     })
     .error(function(data) {
       deferred.reject(data);
@@ -508,10 +530,20 @@ angular.module('app.services', [])
     '&type=full' +
     '&callback=JSON_CALLBACK')
     .success(function(data) {
-
-      window.localStorage.ionWordpress_user_avatar =  JSON.stringify(data.avatar);
-
-      avatar_dfd.resolve(data.avatar);
+        var imageURI = "";
+        var image = new Image();
+        image.setAttribute('crossOrigin', 'anonymous');
+        image.onload = function () {
+            var canvas = document.createElement('canvas');
+            canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
+            canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
+            canvas.getContext('2d').drawImage(this, 0, 0);
+            imageURI = canvas.toDataURL('image/jpg');
+            window.localStorage.ionWordpress_user_avatar =  JSON.stringify(imageURI);
+            avatar_dfd.resolve(imageURI);
+        };
+        image.src = data.avatar;  
+      
     })
     .error(function(err) {
       avatar_dfd.reject(err);

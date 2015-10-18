@@ -6,9 +6,11 @@ angular.module('app.controllers', [])
   $scope.$on('$ionicView.enter', function(){
     // Refresh user data & avatar
     $scope.user = AuthService.getUser();
-    AuthService.getUserGravatar($scope.user.data.id).then(function(data){
-        $scope.user.avatar = data.avatar;
-    });
+    if (!$scope.user.avatar){
+        AuthService.updateUserAvatar().then(function(data){
+            $scope.user.avatar = data;
+        });
+    }
 
     
   });
@@ -633,8 +635,9 @@ console.log(data);
     
     ShopService.getAllProducts()
     .then(function(data){   //quietly load all the free products otherwise page will take too long to load
+console.log(data);
         $scope.freeEbooks = data.filter(function(ebook){
-            return ebook.categories.indexOf('ebooks') > -1 && ebook.price <= 0;
+            return ebook.categories.indexOf('ebooks') > -1 && parseInt(ebook.price) <= 0;
         });
     });      
     
@@ -654,6 +657,7 @@ console.log(data);
 
         ShopService.getAllProducts()
         .then(function(data){   //quietly load all the free products
+    
             $scope.freeEbooks = data.filter(function(ebook){
                 return ebook.categories.indexOf('ebooks') > -1 && ebook.price <= 0;
             });
@@ -697,7 +701,11 @@ console.log(data);
             }
         }
         $ionicLoading.hide();
-    });     
+    });    
+    
+    $scope.openFile = function(url){
+        cordova.InAppBrowser.open(url, "_system");
+    }
     
     
 })
@@ -850,7 +858,7 @@ console.log(data);
     
 })
 
-.controller('PlanCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('PlanCtrl', function($scope, $state, $timeout, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
    $ionicLoading.show({
       template: 'Loading plan...'
     });
@@ -867,7 +875,7 @@ console.log(data);
    
 })
 
-.controller('CustomPlanCtrl', function($scope, $state, $ionicLoading, ShopService, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('CustomPlanCtrl', function($scope, $state, $timeout, $ionicLoading, ShopService, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
    $ionicLoading.show({
       template: 'Loading plan...'
     });
@@ -878,6 +886,14 @@ console.log(data);
     .then(function(data){
       $scope.customPlan = data.post;
       $ionicLoading.hide();
+      $timeout(function(){
+          angular.element("a.custom-plan-upload").click(function(e){
+              e.preventDefault();
+              console.log(angular.element(e.target).attr("href"));
+              cordova.InAppBrowser.open(angular.element(e.target).attr("href"), "_system");
+              
+          });
+      },100);
     });
    
 })
@@ -911,8 +927,8 @@ console.log(data);
   
   $scope.createOrder = function(product){
     $scope.product = product;
-    PaypalService.initPaymentUI().then(function () {
-        PaypalService.makePayment($scope.product.price, $scope.product.title).then(function(){      
+    //PaypalService.initPaymentUI().then(function () {
+        //PaypalService.makePayment($scope.product.price, $scope.product.title).then(function(){      
             $ionicLoading.show({
               template: 'Purchasing...'
             });
@@ -928,8 +944,8 @@ console.log(data);
                     template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
                 });
             });   
-        });
-    });
+        //});
+    //});
   };  
   
   $rootScope.$on('productPurchased',function(event,data){ //detecting when a product has been purchased in the ProductCtrl
@@ -1002,6 +1018,8 @@ console.log(data);
     $scope.messages = [];
     $scope.new_message = "";
     $scope.new_message_id = 0;
+    $scope.freezma_avatar = "";
+    $scope.avatar = ""
     var avatar = "";
     //check if user has purchased messaging
     $scope.sendEnabled = false;
@@ -1016,8 +1034,9 @@ console.log(data);
     });
     avatar = "";
     ShopService.getDownloads().then(function(data){ 
+        console.log(data);
         var messageProduct = data.filter(function(msg){
-            return msg.product.categories.indexOf('messaging') > -1;
+            return (msg.product.categories.indexOf('messaging') > -1  || msg.product.categories.indexOf('plans') > -1 || msg.product.categories.indexOf('8weekshred') > -1);
         });
         if (messageProduct.length > 0){
             $scope.sendEnabled = true;
@@ -1032,17 +1051,22 @@ console.log(data);
 
           $scope.messages = _.map($scope.messages, function(message){
             if(message.sender){
-                if (avatar.length < 1){
-                  PostService.getUserGravatar(message.sender)
-                  .then(function(data){
-                    avatar = data.avatar;
-                    message.user_gravatar = data.avatar;
+                if (parseInt(message.sender) === parseInt(user.data.id)){
+                    message.user_gravatar = user.avatar;
 
-                  });
-                  }
-                  else{
-                    message.user_gravatar = avatar;  
-                  }
+                }
+                else if ($scope.freezma_avatar.length < 1){
+                    PostService.getUserGravatar(message.sender)
+                    .then(function(data){
+                      $scope.freezma_avatar = data;
+                      message.user_gravatar = data;
+
+                    });                    
+
+                }
+                else{
+                    message.user_gravatar = $scope.freezma_avatar;
+                }
               return message;
             }else{
               return message;

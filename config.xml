@@ -34,7 +34,7 @@
     <gap:plugin name="org.apache.cordova.splashscreen"/>
 	<gap:plugin name="nl.x-services.plugins.socialsharing"/>	
 	<gap:plugin name="com.ionic.keyboard"/>	
-	<gap:plugin name="com.paypal.cordova.mobilesdk" />
+	<gap:plugin name="com.paypal.cordova.mobilesdk" source="plugins.cordova.io"/>
 	<gap:plugin name="de.appplant.cordova.plugin.email-composer"/>	
 	<gap:plugin name="org.apache.cordova.console"/>	
 	<gap:plugin name="org.apache.cordova.device"/>	

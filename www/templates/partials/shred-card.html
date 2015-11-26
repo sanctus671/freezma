@@ -4,7 +4,7 @@
 <div ng-if="shred.thumbnail" class="item item-image">
     <img ng-src="{{shred.thumbnail}}">
 </div>
-<div class="card-content" ng-bind-html="shred.content | rawHtml"></div>
+
 <div class="card-footer">
   <a class="card-button primary" ui-sref="app.shred({shredId :shred.id})">VIEW</a>
   <a ng-show="shred.comment_count > 0" class="card-button comments" ui-sref="app.shred({shredId :shred.id})">

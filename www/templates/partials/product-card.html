@@ -10,8 +10,8 @@
     </div>
     <div class="card-content" ng-bind-html="product.short_description | rawHtml"></div>
     <div class="card-footer">
-      <a class="card-button secondary" ng-click="createOrder(product)">BUY FOR {{product.price | currency:"$":0}}AUD</a>
-      <a class="card-button primary" ui-sref="app.product({productId :product.id})">LEARN MORE</a>
+      <a class="card-button primary" ng-click="createOrder(product)">BUY FOR {{product.price | currency:"$":0}}AUD</a>
+      <a class="card-button secondary" ui-sref="app.product({productId :product.id})">LEARN MORE</a>
     </div>
 
 </div>

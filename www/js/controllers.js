@@ -45,7 +45,7 @@ angular.module('app.controllers', [])
   .then(function(data){
 
     var sorted_categories = _.sortBy(data.categories, function(category){ return category.title; });
-    var parents = _.filter(sorted_categories, function(category){ return category.parent===0 && category.title !== "8 Week Shred" && category.title !== "Custom Plans"; });
+    var parents = _.filter(sorted_categories, function(category){ return category.parent===0 && category.title.indexOf("8 Week Shred") < 0 && category.title !== "Custom Plans"; });
     var result = getItems(parents, sorted_categories);
 
     $scope.menu = {
@@ -375,16 +375,17 @@ angular.module('app.controllers', [])
 
   $scope.loadMoreData = function(){
     $scope.page += 1;
-
+/*
     PostService.getRecentPosts($scope.page)
     .then(function(data){
       //We will update this value in every request because new posts can be created
       $scope.totalPages = data.pages;
       var new_posts = PostService.shortenPosts(data.posts);
       $scope.posts = $scope.posts.concat(new_posts);
+      */
 
       $scope.$broadcast('scroll.infiniteScrollComplete');
-    });
+    /*});*/
   };
 
   $scope.moreDataCanBeLoaded = function(){
@@ -518,20 +519,41 @@ angular.module('app.controllers', [])
       template: 'Loading 8 week shred...'
     });
     
-    $scope.shreds = [];
- 
+    $scope.shreds = {};
+
+    $scope.toggleGroup = function(group) {
+      if ($scope.isGroupShown(group)) {
+        $scope.shownGroup = null;
+      } else {
+        $scope.shownGroup = group;
+      }
+    };
+    $scope.isGroupShown = function(group) {
+      return $scope.shownGroup === group;
+    };
+    
+    $scope.getSize = function(object){
+        return _.size(object);
+    }
+    
+    
             
     ShopService.getDownloads()
     .then(function(data){ 
         var shredMember = false;
-console.log(data);
         shredMember = data.filter(function(shredCheck){
             return shredCheck.product.categories.indexOf('8weekshred') > -1;
         });
         if (shredMember.length > 0){
             PostService.getPostsFromCategory(19, 1)
             .then(function(data){
-                $scope.shreds = data.posts;
+                for (var index in data.posts){
+                    var post = data.posts[index], category;
+                    if (post.categories.length > 1){category = post.categories[1].title;}
+                    else{category = "8 Week Shred Posts";}
+                    if ($scope.shreds[category]){$scope.shreds[category].push(post);}
+                    else{$scope.shreds[category] = [post];}
+                }
             });  
         }
         $ionicLoading.hide();
@@ -541,6 +563,7 @@ console.log(data);
         $ionicLoading.show({
           template: 'Loading 8 week shred...'
         });
+        
         ShopService.getDownloads()
         .then(function(data){ 
             var shredMember = false;
@@ -550,7 +573,14 @@ console.log(data);
             if (shredMember.length > 0){
                 PostService.getPostsFromCategory(19, 1)
                 .then(function(data){
-                    $scope.shreds = data.posts;
+                    $scope.shreds = {};
+                    for (var index in data.posts){
+                        var post = data.posts[index], category;
+                        if (post.categories.length > 1){category = post.categories[1].title;}
+                        else{category = "8 Week Shred Posts";}
+                        if ($scope.shreds[category]){$scope.shreds[category].push(post);}
+                        else{$scope.shreds[category] = [post];}
+                    }
                 });  
             }
             $ionicLoading.hide();
@@ -610,7 +640,9 @@ console.log(data);
         $ionicScrollDelegate.scrollBottom(true);
       }
     });
-  };    
+  };  
+  
+  
   
     $scope.openFile = function(url){
         window.open(url, "_system");

@@ -7,7 +7,7 @@
     <!-- Refresh to get the new posts -->
     <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()">
     </ion-refresher>
-    <div ng-if="shreds.length < 1" class="row bookmarks-container">
+    <div ng-if="getSize(shreds) < 1" class="row bookmarks-container">
       <div  class="col col-center">
         <div class="empty-results">
           <i class="icon ion-ios-calendar"></i>
@@ -15,9 +15,19 @@
         </div>
       </div>
     </div>
-    <div class="posts">       
-        <div shred-card ng-repeat="shred in shreds" class="post-card"></div>
-    </div>
+
+    
+    <ion-list class="posts" ng-if="getSize(shreds) > 0">
+        <div class="post-card" ng-repeat="(folder,group) in shreds">
+            <ion-item class="shreds item" ng-click="toggleGroup(group)" ng-class="{active: isGroupShown(group)}">
+                <i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"></i>
+                &nbsp;
+                {{folder}}
+            </ion-item>
+            <ion-item shred-card class="shred item-accordion post-card" ng-repeat="shred in group" ng-show="isGroupShown(group)">
+            </ion-item>
+        </div>
+    </ion-list>
 
 
   </ion-content>

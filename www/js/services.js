@@ -7,9 +7,11 @@ angular.module('app.services', [])
     var deferred = $q.defer();
 
     $http.jsonp(WORDPRESS_API_URL + 'get_recent_posts/' +
+            '?&filter[posts_per_page]=-1' + 
       '?page='+ page +
       '&callback=JSON_CALLBACK')
     .success(function(data) {
+        console.log(data);
       deferred.resolve(data);
     })
     .error(function(data) {

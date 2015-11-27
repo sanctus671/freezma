@@ -1046,8 +1046,16 @@ console.log(data);
   };  
   
   $scope.createOrder = function(){
-      //window.open($scope.product.permalink, "_blank", "location=no"); //ios
       
+    //window.open($scope.product.permalink, "_blank", "location=no");
+    
+var ref = window.open( "http://docs.kendoui.com", "_blank", "EnableViewPortScale=yes" );
+ref.addEventListener( "loadstop", function(event) {
+    alert("hey");
+});   
+      
+      //window.open($scope.product.permalink, "_blank", "location=no"); //ios
+      /*
     PaypalService.initPaymentUI().then(function () {
         PaypalService.makePayment($scope.product.price, $scope.product.title).then(function(){
             $ionicLoading.show({
@@ -1069,6 +1077,7 @@ console.log(data);
     });
     
     });
+    */
     
   };
   

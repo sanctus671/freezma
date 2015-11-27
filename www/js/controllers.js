@@ -1018,7 +1018,7 @@ console.log(data);
   
 })
 
-.controller('ProductCtrl', function($scope, $state, $ionicPopup, $ionicLoading, ShopService, $rootScope, $stateParams, PaypalService) {
+.controller('ProductCtrl', function($scope, $state, $ionicPopup, $ionicLoading, ShopService, $rootScope, $stateParams, PaypalService, AuthService) {
     $ionicLoading.show({
       template: 'Loading item...'
     });
@@ -1048,11 +1048,42 @@ console.log(data);
   $scope.createOrder = function(){
       
     //window.open($scope.product.permalink, "_blank", "location=no");
-    
-var ref = window.open( "http://docs.kendoui.com", "_blank", "EnableViewPortScale=yes" );
-ref.addEventListener( "loadstop", function(event) {
-    alert("hey");
-});   
+    console.log($scope.generatePaypalUrl($scope.product.title,$scope.product.price));
+var ref = window.open( $scope.generatePaypalUrl($scope.product.id, $scope.product.title,$scope.product.price), "_blank", "EnableViewPortScale=yes", "location=no" );
+https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=freezma%40freezmafitness%2ecom&lc=NZ&item_name=tetest&amount=123%2e00&currency_code=AUD&button_subtype=services&no_note=0&bn=PP%2dBuyNowBF%3abtn_buynowCC_LG%2egif%3aNonHostedGuest
+// Once the InAppBrowser finishes loading
+ref.addEventListener( "loadstop", function() {
+
+    // Clear out the name in localStorage for subsequent opens.
+    ref.executeScript({ code: "localStorage.setItem( 'payStatus', '' );" });
+
+    // Start an interval
+    var loop = setInterval(function() {
+
+        // Execute JavaScript to check for the existence of a name in the
+        // child browser's localStorage.
+        ref.executeScript(
+            {
+                code: "localStorage.getItem( 'payStatus' )"
+            },
+            function( values ) {
+                var status = values[ 0 ];
+
+                // If a name was set, clear the interval and close the InAppBrowser.
+                if ( status ) {
+                    clearInterval( loop );
+                    ref.close();
+                    if (status === "success"){
+                        $ionicPopup.alert({
+                            title: 'Purchase successful',
+                            template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
+                        });                        
+                    }
+                }
+            }
+        );
+    });
+}); 
       
       //window.open($scope.product.permalink, "_blank", "location=no"); //ios
       /*
@@ -1080,6 +1111,13 @@ ref.addEventListener( "loadstop", function(event) {
     */
     
   };
+  
+  $scope.generatePaypalUrl = function(productId, productName, price){
+      productName = encodeURI(productName);
+      price = encodeURI(price);
+      var user = AuthService.getUser()
+      return "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_xclick&cbt=Complete%20purchase%20and%20reutrn%20to%20app&rm=2&business=freezma-facilitator@freezmafitness.com&item_name=" + productName + "&amount=" + price + "&custom=" + productId + "," + user.data.id + "&currency_code=AUD&return=http%3A%2F%2Fwww.freezmafitness.com%2Fsuccess.php&cancel_return=http%3A%2F%2Fwww.freezmafitness.com%2Ffail.php"
+  }
   
 })
 

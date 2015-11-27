@@ -1049,7 +1049,7 @@ console.log(data);
       
     //window.open($scope.product.permalink, "_blank", "location=no");
     console.log($scope.generatePaypalUrl($scope.product.title,$scope.product.price));
-var ref = window.open( $scope.generatePaypalUrl($scope.product.id, $scope.product.title,$scope.product.price), "_blank", "EnableViewPortScale=yes", "location=no" );
+var ref = window.open( $scope.generatePaypalUrl($scope.product.id, $scope.product.title,$scope.product.price), "_blank", "EnableViewPortScale=yes,location=no,toolbar=no");
 https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=freezma%40freezmafitness%2ecom&lc=NZ&item_name=tetest&amount=123%2e00&currency_code=AUD&button_subtype=services&no_note=0&bn=PP%2dBuyNowBF%3abtn_buynowCC_LG%2egif%3aNonHostedGuest
 // Once the InAppBrowser finishes loading
 ref.addEventListener( "loadstop", function() {

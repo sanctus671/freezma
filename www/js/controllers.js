@@ -1074,10 +1074,17 @@ ref.addEventListener( "loadstop", function() {
                     clearInterval( loop );
                     ref.close();
                     if (status === "success"){
-                        $ionicPopup.alert({
-                            title: 'Purchase successful',
-                            template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
-                        });                        
+                        ShopService.createOrder($scope.product.id)
+                        .then(function(data){
+                            $rootScope.$broadcast('productPurchased',{productId:$scope.product.id}); //send event for ProductsCtrl
+                            $scope.product = data;
+                            $ionicLoading.hide();
+                            $state.go('app.products');
+                            $ionicPopup.alert({
+                                title: 'Purchase successful',
+                                template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
+                            });
+                        });                       
                     }
                 }
             }

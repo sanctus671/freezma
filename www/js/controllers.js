@@ -1024,6 +1024,7 @@ console.log(data);
     });
     
     $scope.product = [];
+    
     var productId = $stateParams.productId;
     ShopService.getProduct(productId)
     .then(function(data){
@@ -1046,7 +1047,7 @@ console.log(data);
   };  
   
   $scope.createOrder = function(){
-      
+      $scope.purchaseComplete = false;
     //window.open($scope.product.permalink, "_blank", "location=no");
     console.log($scope.generatePaypalUrl($scope.product.title,$scope.product.price));
 var ref = window.open( $scope.generatePaypalUrl($scope.product.id, $scope.product.title,$scope.product.price), "_blank", "EnableViewPortScale=yes,location=no,toolbar=no");
@@ -1071,9 +1072,14 @@ ref.addEventListener( "loadstop", function() {
 
                 // If a name was set, clear the interval and close the InAppBrowser.
                 if ( status ) {
+                    
                     clearInterval( loop );
+                    
                     ref.close();
-                    if (status === "success"){
+                    if (status === "success" && !$scope.purchaseComplete){
+                        $scope.purchaseComplete = true;
+                        status = "";
+                        localStorage.setItem( 'payStatus', '' );
                         ShopService.createOrder($scope.product.id)
                         .then(function(data){
                             $rootScope.$broadcast('productPurchased',{productId:$scope.product.id}); //send event for ProductsCtrl
@@ -1089,7 +1095,7 @@ ref.addEventListener( "loadstop", function() {
                 }
             }
         );
-    });
+    },500);
 }); 
       
       //window.open($scope.product.permalink, "_blank", "location=no"); //ios

@@ -166,8 +166,8 @@ h3.popup-title{
     color: #000;
 }
 
-.popup-body{
-    color: #000;
+.popup-body, .popup-body span{
+    color: #000 !important;
 }
 
 /*posts*/

@@ -1045,7 +1045,7 @@ console.log(data);
       productName = encodeURI(productName);
       price = encodeURI(price);
       var user = AuthService.getUser()
-      return "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_xclick&cbt=Complete%20purchase%20and%20reutrn%20to%20app&rm=2&business=freezma-facilitator@freezmafitness.com&item_name=" + productName + "&amount=" + price + "&custom=" + productId + "," + user.data.id + "&currency_code=AUD&return=http%3A%2F%2Fwww.freezmafitness.com%2Fsuccess.php&cancel_return=http%3A%2F%2Fwww.freezmafitness.com%2Ffail.php"
+      return "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&cbt=Complete%20purchase%20and%20reutrn%20to%20app&rm=2&business=freezma@freezmafitness.com&item_name=" + productName + "&amount=" + price + "&custom=" + productId + "," + user.data.id + "&currency_code=AUD&return=http%3A%2F%2Fwww.freezmafitness.com%2Fsuccess.php&cancel_return=http%3A%2F%2Fwww.freezmafitness.com%2Ffail.php"
   }  
   
   
@@ -1160,7 +1160,7 @@ console.log(data);
       productName = encodeURI(productName);
       price = encodeURI(price);
       var user = AuthService.getUser()
-      return "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_xclick&cbt=Complete%20purchase%20and%20reutrn%20to%20app&rm=2&business=freezma-facilitator@freezmafitness.com&item_name=" + productName + "&amount=" + price + "&custom=" + productId + "," + user.data.id + "&currency_code=AUD&return=http%3A%2F%2Fwww.freezmafitness.com%2Fsuccess.php&cancel_return=http%3A%2F%2Fwww.freezmafitness.com%2Ffail.php"
+      return "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&cbt=Complete%20purchase%20and%20reutrn%20to%20app&rm=2&business=freezma@freezmafitness.com&item_name=" + productName + "&amount=" + price + "&custom=" + productId + "," + user.data.id + "&currency_code=AUD&return=http%3A%2F%2Fwww.freezmafitness.com%2Fsuccess.php&cancel_return=http%3A%2F%2Fwww.freezmafitness.com%2Ffail.php"
   }
   
 })

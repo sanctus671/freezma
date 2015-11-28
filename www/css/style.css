@@ -167,7 +167,7 @@ h3.popup-title{
 }
 
 .popup-body{
-    color: #444444;
+    color: #000;
 }
 
 /*posts*/
@@ -269,4 +269,6 @@ h3.popup-title{
     padding-top: 0px;
     padding-bottom: 0px;
 }
+
+
 

@@ -1095,7 +1095,7 @@ ref.addEventListener( "loadstop", function() {
                 }
             }
         );
-    },500);
+    });
 }); 
       
       //window.open($scope.product.permalink, "_blank", "location=no"); //ios

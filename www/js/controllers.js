@@ -132,7 +132,6 @@ angular.module('app.controllers', [])
   };  
   
   $scope.onPhotoSuccess = function(imageURI){
-      console.log(imageURI);
         $ionicLoading.show({
             template: 'Updating avatar...'
         }); 
@@ -142,11 +141,9 @@ angular.module('app.controllers', [])
         options.fileName=$scope.user.data.username;
         options.mimeType="image/jpeg";
         options.params = {userid:$scope.user.data.id};
-        console.log($scope.user);
         var ft = new FileTransfer();
         ft.upload(imageURI, encodeURI(WORDPRESS_API4_URL), function(response){
             $ionicLoading.hide();
-            console.log("in success area");
             var data = JSON.parse(response.response);
             if (data.result === 'success'){
                 var imageMenu = document.getElementById('menu-avatar');
@@ -163,9 +160,7 @@ angular.module('app.controllers', [])
                 });                
             }
         },  
-        function(data){
-            console.log("in fail area");
-            console.log(data);            
+        function(data){           
             $ionicLoading.hide();        
             $ionicPopup.alert({
             title: 'Error',
@@ -413,12 +408,11 @@ angular.module('app.controllers', [])
   PostService.getPost(postId)
   .then(function(data){
     $scope.post = data.post;
-    console.log(data);
     $scope.comments = _.map(data.post.comments, function(comment){
       if(comment.author){
         PostService.getUserGravatar(comment.author.id)
         .then(function(data){
-          comment.user_gravatar = data.avatar;
+          comment.user_gravatar = data;
         });
         return comment;
       }else{
@@ -605,7 +599,7 @@ angular.module('app.controllers', [])
         if(comment.author){
           PostService.getUserGravatar(comment.author.id)
           .then(function(data){
-            comment.user_gravatar = data.avatar;
+            comment.user_gravatar = data;
           });
           return comment;
         }else{
@@ -661,7 +655,6 @@ angular.module('app.controllers', [])
     
     ShopService.getDownloads()
     .then(function(data){   
-        console.log(data);
         $scope.ebooks = data.filter(function(ebook){
             return ebook.product.categories.indexOf('ebooks') > -1;
         });
@@ -671,7 +664,6 @@ angular.module('app.controllers', [])
     
     ShopService.getAllProducts()
     .then(function(data){   //quietly load all the free products otherwise page will take too long to load
-console.log(data);
         $scope.freeEbooks = data.filter(function(ebook){
             return ebook.categories.indexOf('ebooks') > -1 && parseInt(ebook.price) <= 0;
         });
@@ -812,7 +804,6 @@ console.log(data);
         $scope.video = data.filter(function(video){
             return video.product_id == videoId;
         })[0];
-        console.log($scope.video);
         $ionicLoading.hide();
     });    
     
@@ -879,7 +870,6 @@ console.log(data);
                 }
                 return false;
                 });
-                console.log($scope.customPlans);
         });  
         
 
@@ -951,16 +941,34 @@ console.log(data);
    
 })
 
-.controller('ProductsCtrl', function($scope, $ionicPopup, $state, $ionicLoading, ShopService, $rootScope, $stateParams, AuthService, PaypalService) {
+.controller('ProductsCtrl', function($scope, $ionicPopup, $ionicModal, $state, $ionicLoading, ShopService, $rootScope, $stateParams, AuthService, PaypalService) {
     $ionicLoading.show({
       template: 'Loading store...'
     });
     
     $scope.products = [];
     $scope.product = {};
+    
+    $scope.planDetails = {
+        name:null,
+        gender:"Male",
+        email:null,
+        age:null,
+        height:null,
+        weight:null,
+        country:"Australia",
+        allergies:null,
+        injuries:null,
+        bodytype:"Meso",
+        activity:1,
+        ocupation:null,
+        results:null,
+        mealtype:null,
+        plan:null
+    }    
+    
     ShopService.getProducts()
     .then(function(data){
-        console.log(data);
         $scope.products = data;
         $ionicLoading.hide();
     });      
@@ -976,13 +984,70 @@ console.log(data);
         $ionicLoading.hide();
         $scope.$broadcast('scroll.refreshComplete');
     });  
-  };    
+  };  
   
-  $scope.createOrder = function(product){
-    $scope.product = product;
+  $ionicModal.fromTemplateUrl('templates/partials/plan-details.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.plan_modal = modal;
+  });    
+  
+  $scope.showPlanModal = function() {
+    
+    $scope.plan_modal.show();
+    
+    
+  };   
+  
+  $scope.savePlanDetails = function(){
+      $scope.planDetails.plan = $scope.product.title;
+      ShopService.savePlanDetails($scope.planDetails);
+
+  }
+  
+  $scope.buyProduct = function(product){
+      $scope.product = product;
+      if ($scope.product.categories.indexOf('plans') > -1 || $scope.product.categories.indexOf('8weekshred') > -1){
+          
+            //prefill some stuff if possible
+            var user = AuthService.getUser();
+            if (user.data.email){
+                $scope.planDetails.email = user.data.email;
+            }
+            AuthService.getUserProfile().then(function(data){
+              var profile = {
+                  firstName : data["wpcf-first-name"],
+                  lastName : data["wpcf-last-name"],
+                  age : parseInt(data["wpcf-age"]),
+                  country : data["wpcf-country"]  
+              };
+                if (profile.firstName && profile.lastName){
+                    $scope.planDetails.name = profile.firstName + " " + profile.lastName;
+                }
+                if (profile.country){
+                    $scope.planDetails.country = profile.country;
+                }   
+                if (profile.age){
+                    $scope.planDetails.age = profile.age;
+                }                 
+
+
+            });           
+
+            $scope.showPlanModal();
+      }
+      else{
+          $scope.createOrder();
+      }
+  }  
+  
+  
+  $scope.createOrder = function(){
+    
     
     $scope.purchaseComplete = false;
-    var ref = window.open( $scope.generatePaypalUrl($scope.product.id, $scope.product.title,$scope.product.price), "_blank", "EnableViewPortScale=yes,location=no,toolbar=no");
+    var ref = window.open( $scope.generatePaypalUrl($scope.product.id, $scope.product.title,$scope.product.price, $scope.product.categories), "_blank", "EnableViewPortScale=yes,location=no,toolbar=no");
 
     ref.addEventListener( "loadstop", function() {
         ref.executeScript({ code: "localStorage.setItem( 'payStatus', '' );" });
@@ -998,15 +1063,13 @@ console.log(data);
                             $scope.purchaseComplete = true;
                             status = "";
                             localStorage.setItem( 'payStatus', '' );
-                            ShopService.createOrder($scope.product.id)
-                            .then(function(data){
-                                $rootScope.$broadcast('productPurchased',{productId:$scope.product.id}); //send event for ProductsCtrl
-                                $ionicLoading.hide();
-                                $ionicPopup.alert({
-                                    title: 'Purchase successful',
-                                    template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
-                                });
-                            });                       
+                            $rootScope.$broadcast('productPurchased',{productId:$scope.product.id}); //send event for ProductsCtrl
+                            $ionicLoading.hide();
+                            $ionicPopup.alert({
+                                title: 'Purchase successful',
+                                template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
+                            });
+                                                  
                         }
                     }
                 }
@@ -1041,18 +1104,18 @@ console.log(data);
     
   };  
   
-  $scope.generatePaypalUrl = function(productId, productName, price){
+  $scope.generatePaypalUrl = function(productId, productName, price, categories){
       productName = encodeURI(productName);
       price = encodeURI(price);
-      var user = AuthService.getUser()
-      return "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&cbt=Complete%20purchase%20and%20reutrn%20to%20app&rm=2&business=freezma@freezmafitness.com&item_name=" + productName + "&amount=" + price + "&custom=" + productId + "," + user.data.id + "&currency_code=AUD&return=http%3A%2F%2Fwww.freezmafitness.com%2Fsuccess.php&cancel_return=http%3A%2F%2Fwww.freezmafitness.com%2Ffail.php"
+      var user = AuthService.getUser();
+      var custom = user.data.email + "," + productId + "," + user.data.id;
+      if (categories.indexOf('plans') > -1 || categories.indexOf('8weekshred') > -1){custom = custom + ",plan";}
+      return "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&cbt=Complete%20purchase%20and%20reutrn%20to%20app&rm=2&business=freezma@freezmafitness.com&item_name=" + productName + "&amount=" + price + "&custom=" + custom + "&currency_code=AUD&return=http%3A%2F%2Fwww.freezmafitness.com%2Fsuccess.php&cancel_return=http%3A%2F%2Fwww.freezmafitness.com%2Ffail.php&notify_url=http%3A%2F%2Fwww.freezmafitness.com%2Fclasses%2Fmy_ipn.php";
   }  
   
   
   $rootScope.$on('productPurchased',function(event,data){ //detecting when a product has been purchased in the ProductCtrl
-      console.log(data);
-      console.log($scope.products);
-      
+
       for (var index in $scope.products){
           if ($scope.products[index].id === data.productId){
               $scope.products.splice(index, 1);
@@ -1063,12 +1126,30 @@ console.log(data);
   
 })
 
-.controller('ProductCtrl', function($scope, $state, $ionicPopup, $ionicLoading, ShopService, $rootScope, $stateParams, PaypalService, AuthService) {
+.controller('ProductCtrl', function($scope, $state, $ionicPopup, $ionicModal, $ionicLoading, ShopService, $rootScope, $stateParams, PaypalService, AuthService) {
     $ionicLoading.show({
       template: 'Loading item...'
     });
     
     $scope.product = [];
+    
+    $scope.planDetails = {
+        name:null,
+        gender:"Male",
+        email:null,
+        age:null,
+        height:null,
+        weight:null,
+        country:"Australia",
+        allergies:null,
+        injuries:null,
+        bodytype:"Meso",
+        activity:1,
+        ocupation:null,
+        results:null,
+        mealtype:null,
+        plan:null
+    }
     
     var productId = $stateParams.productId;
     ShopService.getProduct(productId)
@@ -1091,9 +1172,65 @@ console.log(data);
     });  
   };  
   
+  $ionicModal.fromTemplateUrl('templates/partials/plan-details.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.plan_modal = modal;
+  });    
+  
+  $scope.showPlanModal = function() {
+    
+    $scope.plan_modal.show();
+    
+    
+  };   
+  
+  $scope.savePlanDetails = function(){
+      $scope.planDetails.plan = $scope.product.title;
+      ShopService.savePlanDetails($scope.planDetails);
+
+  }
+  
+  $scope.buyProduct = function(){
+      if ($scope.product.categories.indexOf('plans') > -1 || $scope.product.categories.indexOf('8weekshred') > -1){
+          
+            //prefill some stuff if possible
+            var user = AuthService.getUser();
+            if (user.data.email){
+                $scope.planDetails.email = user.data.email;
+            }
+            AuthService.getUserProfile().then(function(data){
+              var profile = {
+                  firstName : data["wpcf-first-name"],
+                  lastName : data["wpcf-last-name"],
+                  age : parseInt(data["wpcf-age"]),
+                  country : data["wpcf-country"]  
+              };
+                if (profile.firstName && profile.lastName){
+                    $scope.planDetails.name = profile.firstName + " " + profile.lastName;
+                }
+                if (profile.country){
+                    $scope.planDetails.country = profile.country;
+                }   
+                if (profile.age){
+                    $scope.planDetails.age = profile.age;
+                }                 
+
+
+            });           
+
+            $scope.showPlanModal();
+      }
+      else{
+          $scope.createOrder();
+      }
+  }
+  
+  
   $scope.createOrder = function(){
     $scope.purchaseComplete = false;
-    var ref = window.open( $scope.generatePaypalUrl($scope.product.id, $scope.product.title,$scope.product.price), "_blank", "EnableViewPortScale=yes,location=no,toolbar=no");
+    var ref = window.open( $scope.generatePaypalUrl($scope.product.id, $scope.product.title,$scope.product.price, $scope.product.categories), "_blank", "EnableViewPortScale=yes,location=no,toolbar=no");
 
     ref.addEventListener( "loadstop", function() {
         ref.executeScript({ code: "localStorage.setItem( 'payStatus', '' );" });
@@ -1109,17 +1246,14 @@ console.log(data);
                             $scope.purchaseComplete = true;
                             status = "";
                             localStorage.setItem( 'payStatus', '' );
-                            ShopService.createOrder($scope.product.id)
-                            .then(function(data){
-                                $rootScope.$broadcast('productPurchased',{productId:$scope.product.id}); //send event for ProductsCtrl
-                                $scope.product = data;
-                                $ionicLoading.hide();
-                                $state.go('app.products');
-                                $ionicPopup.alert({
-                                    title: 'Purchase successful',
-                                    template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
-                                });
-                            });                       
+                            $rootScope.$broadcast('productPurchased',{productId:$scope.product.id}); //send event for ProductsCtrl
+                            $ionicLoading.hide();
+                            $state.go('app.products');
+                            $ionicPopup.alert({
+                                title: 'Purchase successful',
+                                template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
+                            });
+                                                   
                         }
                     }
                 }
@@ -1156,11 +1290,13 @@ console.log(data);
     
   };
   
-  $scope.generatePaypalUrl = function(productId, productName, price){
+  $scope.generatePaypalUrl = function(productId, productName, price, categories){
       productName = encodeURI(productName);
       price = encodeURI(price);
-      var user = AuthService.getUser()
-      return "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&cbt=Complete%20purchase%20and%20reutrn%20to%20app&rm=2&business=freezma@freezmafitness.com&item_name=" + productName + "&amount=" + price + "&custom=" + productId + "," + user.data.id + "&currency_code=AUD&return=http%3A%2F%2Fwww.freezmafitness.com%2Fsuccess.php&cancel_return=http%3A%2F%2Fwww.freezmafitness.com%2Ffail.php"
+      var user = AuthService.getUser();
+      var custom = user.data.email + "," + productId + "," + user.data.id;
+      if (categories.indexOf('plans') > -1 || categories.indexOf('8weekshred') > -1){custom = custom + ",plan";}
+      return "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&cbt=Complete%20purchase%20and%20reutrn%20to%20app&rm=2&business=freezma@freezmafitness.com&item_name=" + productName + "&amount=" + price + "&custom=" + custom + "&currency_code=AUD&return=http%3A%2F%2Fwww.freezmafitness.com%2Fsuccess.php&cancel_return=http%3A%2F%2Fwww.freezmafitness.com%2Ffail.php&notify_url=http%3A%2F%2Fwww.freezmafitness.com%2Fclasses%2Fmy_ipn.php";
   }
   
 })
@@ -1186,7 +1322,6 @@ console.log(data);
     });
     avatar = "";
     ShopService.getDownloads().then(function(data){ 
-        console.log(data);
         var messageProduct = data.filter(function(msg){
             return (msg.product.categories.indexOf('messaging') > -1  || msg.product.categories.indexOf('plans') > -1 || msg.product.categories.indexOf('8weekshred') > -1);
         });

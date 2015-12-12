@@ -1,0 +1,94 @@
+<ion-modal-view class = "home-view">
+	<ion-header-bar>
+		<h1 class="title"  ng-bind-html="product.title | rawHtml"></h1>
+		<div class="button button-clear" ng-click="plan_modal.hide()"><span class="icon ion-close"></span></div>
+	</ion-header-bar>
+	<ion-content>
+    <div class="post">
+<div class="item">
+
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Name</span>
+    <input type="text" ng-model="planDetails.name" placeholder="Full Name">
+  </label>
+  <label class="item item-input  item-select">
+    <span class="input-label">Gender</span>
+    <select ng-model="planDetails.gender">
+        <option selected value="Male">Male</option>
+        <option value="Female">Female</option>
+    </select>
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Email</span>
+    <input type="email" ng-model="planDetails.email" placeholder="email@email.com">
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Age</span>
+    <input type="number" ng-model="planDetails.age" placeholder="Age">
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Height</span>
+    <input type="text" ng-model="planDetails.height" placeholder="Height">
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Weight</span>
+    <input type="text" ng-model="planDetails.weight" placeholder="Weight">
+  </label>    
+  <label class="item item-input  item-select">
+    <span class="input-label">Country</span>
+    <country-select ng-model="planDetails.country" placeholder="Country"></country-select>
+  </label>
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Allergies/Food Dislikes?</span>
+    <input type="text" ng-model="planDetails.allergies" placeholder="None">
+  </label>   
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Injuries/Medical Conditions?</span>
+    <input type="text" ng-model="planDetails.injuries" placeholder="None">
+  </label>    
+    <label class="item item-input">
+    <img src="/img/bodytype.png" style="max-width:100%;">
+    </label>
+  <label class="item item-input  item-select">
+      
+    <span class="input-label">       
+        Body Type (Closest to you)</span>
+    <select ng-model="planDetails.bodytype">
+        <option value="Ecto">Ectomorph</option>
+        <option selected value="Meso">Mesomorph</option>
+        <option value="Endo">Endomorph</option>
+    </select>
+  </label>  
+  <label class="item item-input  item-select">
+    <span class="input-label">Average Daily Activity Levels (not including gym)</span>
+    <select ng-model="planDetails.activity">
+        <option value="1" selected>1 - Not Active</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10 - Extremely Active</option>
+    </select>
+  </label>     
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Occupation Description</span>
+    <textarea rows="5" placeholder="Occupation Description" ng-model="planDetails.ocupation"></textarea>
+  </label>  
+  <label class="item item-input item-stacked-label">
+    <span class="input-label">Results</span>
+    <textarea rows="5" placeholder="Please tell me in detail what results your are looking for (be specific)." ng-model="planDetails.results"></textarea>
+  </label>         
+
+    </div>
+    </div>
+<div class="card-footer">
+  <a class="card-button secondary" ng-click="plan_modal.hide()">CANCEL</a>
+  <a class="card-button primary" ng-click="savePlanDetails();createOrder();plan_modal.hide()">SUBMIT</a>
+
+</div>            
+	</ion-content>
+</ion-modal-view>

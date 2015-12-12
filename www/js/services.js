@@ -11,7 +11,6 @@ angular.module('app.services', [])
       '?page='+ page +
       '&callback=JSON_CALLBACK')
     .success(function(data) {
-        console.log(data);
       deferred.resolve(data);
     })
     .error(function(data) {
@@ -632,13 +631,29 @@ angular.module('app.services', [])
       deferred.resolve(data);
     })
     .error(function(data) {
-        console.log(data);
       deferred.reject(data);
     });
 
     return deferred.promise;    
   };
   
+  this.savePlanDetails = function(details){
+    var deferred = $q.defer(),
+        user = JSON.parse(window.localStorage.ionWordpress_user || null),
+        data = {plandetails:'true',userid: user.user_id};
+    data = angular.extend(data,details);    
+    $http.post(WORDPRESS_API2_URL, data)  
+    .success(function(data) {
+
+      deferred.resolve(data);
+    })
+    .error(function(data) {
+
+      deferred.reject(data);
+    });
+
+    return deferred.promise;      
+  }
   
   this.createOrder = function(productid) {
     var deferred = $q.defer(),
@@ -718,7 +733,6 @@ angular.module('app.services', [])
       deferred.resolve(data);
     })
     .error(function(data) {
-        console.log(data);
       deferred.reject(data);
     });
 
@@ -731,11 +745,9 @@ angular.module('app.services', [])
         user = JSON.parse(window.localStorage.ionWordpress_user || null);
     $http.post(WORDPRESS_API3_URL, {messagecreate:'true',userid: user.user_id, message:message})    
     .success(function(data) {
-        //console.log({messagecreate:'true',userid: user.user_id, message:message});
       deferred.resolve(data);
     })
     .error(function(data) {
-                console.log(data);
       deferred.reject(data);
     });
 

@@ -246,7 +246,7 @@ angular.module('app.controllers', [])
 
 
 // WALKTHROUGH
-.controller('WalkthroughCtrl', function($scope, $state, $ionicSlideBoxDelegate) {
+.controller('WalkthroughCtrl', function($scope, $ionicSlideBoxDelegate) {
 
   $scope.$on('$ionicView.enter', function(){
     //this is to fix ng-repeat slider width:0px;
@@ -285,7 +285,7 @@ angular.module('app.controllers', [])
 
 
 // FORGOT PASSWORD
-.controller('ForgotPasswordCtrl', function($scope, $state, $ionicLoading, AuthService) {
+.controller('ForgotPasswordCtrl', function($scope, $ionicLoading, AuthService) {
   $scope.user = {};
 
   $scope.recoverPassword = function(){
@@ -338,7 +338,7 @@ angular.module('app.controllers', [])
 })
 
 // HOME - GET RECENT POSTS
-.controller('HomeCtrl', function($scope, $rootScope, $state, $ionicLoading, PostService) {
+.controller('HomeCtrl', function($scope, $ionicLoading, PostService) {
   //angular.element(".bar.app-top-bar").css({"background-image":"url(../img/HeaderGold.PNG)"});  
     
     
@@ -399,7 +399,7 @@ angular.module('app.controllers', [])
 
 
 // POST
-.controller('PostCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('PostCtrl', function($scope, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
   $ionicLoading.show({
     template: 'Loading post...'
   });
@@ -456,7 +456,7 @@ angular.module('app.controllers', [])
 
 
 // CATEGORY
-.controller('PostCategoryCtrl', function($scope, $rootScope, $state, $ionicLoading, $stateParams, PostService) {
+.controller('PostCategoryCtrl', function($scope, $ionicLoading, $stateParams, PostService) {
 
   $scope.category = {};
   $scope.category.id = $stateParams.categoryId;
@@ -508,7 +508,7 @@ angular.module('app.controllers', [])
   $scope.doRefresh();
 })
 
-.controller('ShredsCtrl', function($scope, $state, $ionicLoading, ShopService, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('ShredsCtrl', function($scope, $ionicLoading, ShopService, PostService) {
     $ionicLoading.show({
       template: 'Loading 8 week shred...'
     });
@@ -585,7 +585,7 @@ angular.module('app.controllers', [])
     
 })
 
-.controller('ShredCtrl', function($scope, $state, $ionicLoading, ShopService, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('ShredCtrl', function($scope, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
    $ionicLoading.show({
       template: 'Loading video...'
     });
@@ -646,7 +646,7 @@ angular.module('app.controllers', [])
 })
 
 
-.controller('EbooksCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('EbooksCtrl', function($scope,$ionicLoading, ShopService) {
     $ionicLoading.show({
       template: 'Loading ebooks...'
     });
@@ -696,7 +696,7 @@ angular.module('app.controllers', [])
     
 })
 
-.controller('EbookCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('EbookCtrl', function($scope, $ionicLoading, ShopService, $stateParams) {
    $ionicLoading.show({
       template: 'Loading ebook...'
     });
@@ -717,7 +717,7 @@ angular.module('app.controllers', [])
        
 })
 
-.controller('FreeEbookCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('FreeEbookCtrl', function($scope, $ionicLoading, ShopService, $stateParams) {
    $ionicLoading.show({
       template: 'Loading ebook...'
     });
@@ -742,7 +742,7 @@ angular.module('app.controllers', [])
     
 })
 
-.controller('VideosCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('VideosCtrl', function($scope, $ionicLoading, ShopService) {
     $ionicLoading.show({
       template: 'Loading videos...'
     });
@@ -792,7 +792,7 @@ angular.module('app.controllers', [])
     
 })
 
-.controller('VideoCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('VideoCtrl', function($scope,$ionicLoading, ShopService, $stateParams) {
    $ionicLoading.show({
       template: 'Loading video...'
     });
@@ -814,7 +814,7 @@ angular.module('app.controllers', [])
     
 })
 
-.controller('FreeVideoCtrl', function($scope, $state, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('FreeVideoCtrl', function($scope, $ionicLoading, ShopService, $stateParams) {
    $ionicLoading.show({
       template: 'Loading video...'
     });
@@ -840,7 +840,7 @@ angular.module('app.controllers', [])
     
 })
 
-.controller('PlansCtrl', function($scope, $state, $ionicLoading, ShopService, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('PlansCtrl', function($scope, $ionicLoading, ShopService, PostService, AuthService) {
     $ionicLoading.show({
       template: 'Loading plans...'
     });
@@ -896,7 +896,7 @@ angular.module('app.controllers', [])
     
 })
 
-.controller('PlanCtrl', function($scope, $state, $timeout, $ionicLoading, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('PlanCtrl', function($scope, $ionicLoading, ShopService, $stateParams) {
    $ionicLoading.show({
       template: 'Loading plan...'
     });
@@ -917,7 +917,7 @@ angular.module('app.controllers', [])
    
 })
 
-.controller('CustomPlanCtrl', function($scope, $state, $timeout, $ionicLoading, ShopService, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('CustomPlanCtrl', function($scope, $timeout, $ionicLoading,PostService, $stateParams) {
    $ionicLoading.show({
       template: 'Loading plan...'
     });
@@ -941,7 +941,7 @@ angular.module('app.controllers', [])
    
 })
 
-.controller('ProductsCtrl', function($scope, $ionicPopup, $ionicModal, $state, $ionicLoading, ShopService, $rootScope, $stateParams, AuthService, PaypalService) {
+.controller('ProductsCtrl', function($scope, $ionicPopup, $ionicModal, $ionicLoading, ShopService, $rootScope, AuthService) {
     $ionicLoading.show({
       template: 'Loading store...'
     });
@@ -1126,7 +1126,7 @@ angular.module('app.controllers', [])
   
 })
 
-.controller('ProductCtrl', function($scope, $state, $ionicPopup, $ionicModal, $ionicLoading, ShopService, $rootScope, $stateParams, PaypalService, AuthService) {
+.controller('ProductCtrl', function($scope, $state, $ionicPopup, $ionicModal, $ionicLoading, ShopService, $rootScope, $stateParams, AuthService) {
     $ionicLoading.show({
       template: 'Loading item...'
     });
@@ -1301,7 +1301,7 @@ angular.module('app.controllers', [])
   
 })
 
-.controller('MessagesCtrl', function($scope, $state, $ionicLoading, PostService, MessageService, ShopService, $stateParams, AuthService, $ionicScrollDelegate) {
+.controller('MessagesCtrl', function($scope, $ionicLoading, PostService, MessageService, ShopService, AuthService, $ionicScrollDelegate) {
     var user = AuthService.getUser();
     $scope.messages = [];
     $scope.new_message = "";
@@ -1412,9 +1412,6 @@ angular.module('app.controllers', [])
     
 })
 
-.controller('MessageCtrl', function($scope, $state, $ionicLoading, PostService, $stateParams, AuthService, $ionicScrollDelegate) {
-    
-})
 
 
 ;

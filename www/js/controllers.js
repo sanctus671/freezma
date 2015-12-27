@@ -941,7 +941,7 @@ angular.module('app.controllers', [])
    
 })
 
-.controller('ProductsCtrl', function($scope, $ionicPopup, $ionicModal, $ionicLoading, ShopService, $rootScope, AuthService) {
+.controller('ProductsCtrl', function($scope, $ionicPopup, $cordovaInAppBrowser, $ionicModal, $ionicLoading, ShopService, $rootScope, AuthService) {
     $ionicLoading.show({
       template: 'Loading store...'
     });
@@ -1047,9 +1047,9 @@ angular.module('app.controllers', [])
     
     
     $scope.purchaseComplete = false;
-    var ref = window.open( $scope.generatePaypalUrl($scope.product.id, $scope.product.title,$scope.product.price, $scope.product.categories), "_blank", "EnableViewPortScale=yes,location=no,toolbar=no");
+    var ref = window.open( $scope.generatePaypalUrl($scope.product.id, $scope.product.title,$scope.product.price, $scope.product.categories), "_blank", "EnableViewPortScale=yes,location=no,toolbar=yes");
 
-    ref.addEventListener( "loadstop", function() {
+    ref.addEventListener( "loadstop", function(event) {
         ref.executeScript({ code: "localStorage.setItem( 'payStatus', '' );" });
         var loop = setInterval(function() {
             ref.executeScript(
@@ -1230,37 +1230,23 @@ angular.module('app.controllers', [])
   
   $scope.createOrder = function(){
     $scope.purchaseComplete = false;
-    var ref = window.open( $scope.generatePaypalUrl($scope.product.id, $scope.product.title,$scope.product.price, $scope.product.categories), "_blank", "EnableViewPortScale=yes,location=no,toolbar=no");
+    var ref = window.open( $scope.generatePaypalUrl($scope.product.id, $scope.product.title,$scope.product.price, $scope.product.categories), "_blank", "EnableViewPortScale=yes,location=no,toolbar=yes");
 
-    ref.addEventListener( "loadstop", function() {
-        ref.executeScript({ code: "localStorage.setItem( 'payStatus', '' );" });
-        var loop = setInterval(function() {
-            ref.executeScript(
-                {code: "localStorage.getItem( 'payStatus' )"},
-                function( values ) {
-                    var status = values[ 0 ];
-                    if ( status ) {
-                        clearInterval( loop );
-                        ref.close();
-                        if (status === "success" && !$scope.purchaseComplete){
-                            $scope.purchaseComplete = true;
-                            status = "";
-                            localStorage.setItem( 'payStatus', '' );
-                            $rootScope.$broadcast('productPurchased',{productId:$scope.product.id}); //send event for ProductsCtrl
-                            $ionicLoading.hide();
-                            $state.go('app.products');
-                            $ionicPopup.alert({
-                                title: 'Purchase successful',
-                                template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
-                            });
-                                                   
-                        }
-                    }
-                }
-            );
-        });
-    }); 
-
+    ref.addEventListener('loadstop', function(event) {        
+        if (event.url.match("http://www.freezmafitness.com/fail.php")) {
+            ref.close();
+        }
+        else if (event.url.match("http://www.freezmafitness.com/success.php")  && !$scope.purchaseComplete){
+            ref.close();
+            $scope.purchaseComplete = true;
+            $rootScope.$broadcast('productPurchased',{productId:$scope.product.id}); //send event for ProductsCtrl
+            $state.go('app.products');
+            $ionicPopup.alert({
+                title: 'Purchase successful',
+                template: 'Thank you for your purchase! Head over to the appropriate page in the side menu to see your purchased items.'
+            });        
+        }
+    });
 
     /*
     //window.open($scope.product.permalink, "_blank", "location=no"); //for ios when mobile SDK was broken

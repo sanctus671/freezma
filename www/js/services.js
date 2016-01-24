@@ -360,26 +360,35 @@ angular.module('app.services', [])
     var deferred = $q.defer(),
         nonce_dfd = $q.defer(),
         authService = this;
-
+console.log("in service register");
     authService.requestNonce("user", "register")
     .then(function(nonce){
+      console.log(nounce)
       nonce_dfd.resolve(nonce);
+    },function(data){
+      console.log(data);
     });
 
     nonce_dfd.promise.then(function(nonce){
       authService.registerUser(user.userName, user.email,
         user.displayName, user.password, nonce)
       .then(function(data){
+        console.log(data);
         if(data.status == "error"){
           // return error message
           deferred.reject(data.error);
         }else{
           // in order to get all user data we need to call this function
           // because the register does not provide user data
-          authService.doLogin(user).then(function(){
+          authService.doLogin(user).then(function(data){
+            console.log(data);
             deferred.resolve(user);
+          },function(data){
+            console.log(data);
           });
         }
+      },function(data){
+        console.log(data);
       });
     });
 

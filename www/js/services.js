@@ -363,7 +363,7 @@ angular.module('app.services', [])
 console.log("in service register");
     authService.requestNonce("user", "register")
     .then(function(nonce){
-      console.log(nounce)
+      console.log(nonce)
       nonce_dfd.resolve(nonce);
     },function(data){
       console.log(data);

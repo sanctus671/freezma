@@ -323,14 +323,16 @@ angular.module('app.controllers', [])
       email: $scope.user.email,
       displayName: $scope.user.displayName
     };
-
+	console.log($scope.user);
     AuthService.doRegister(user)
     .then(function(user){
       //success
+      console.log("successful register");
       $state.go('app.home');
       $ionicLoading.hide();
     },function(err){
       //err
+      console.log("error register");
       $scope.error = err;
       $ionicLoading.hide();
     });
